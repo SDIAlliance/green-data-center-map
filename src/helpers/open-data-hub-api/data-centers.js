@@ -1,7 +1,7 @@
 import * as request from 'd3-request';
 
-import { isLocalhost } from './environment';
-import thirdPartyServices from '../services/thirdparty';
+import { isLocalhost } from '../environment';
+import thirdPartyServices from '../../services/thirdparty';
 
 function isRemoteParam() {
   return (new URLSearchParams(window.location.search)).get('remote') === 'true';
@@ -19,7 +19,7 @@ export function getEndpoint() {
   return isUsingLocalEndpoint() ? 'https://stoplight.io/mocks/sdia/odh-api-spec/33382459' : '';
 }
 
-export function dataCentersApiRequest(path) {
+export function fetchDataCentersApiRequest(path) {
   const url = getEndpoint() + path;
 
   return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ export function dataCentersApiRequest(path) {
           };
           reject(errorToReturn);
         } else {
-          resolve(res);
+          resolve(Array.isArray(res) ? res : [res]);
         }
       });
   });

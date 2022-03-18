@@ -6,7 +6,7 @@ import {
 } from 'redux-saga/effects';
 
 import thirdPartyServices from '../services/thirdparty';
-import { dataCentersApiRequest } from '../helpers/data-center-api';
+import { fetchDataCentersApiRequest } from '../helpers/open-data-hub-api/data-centers';
 import { handleRequestError, protectedJsonRequest } from '../helpers/api';
 import { history } from '../helpers/router';
 import {
@@ -105,7 +105,7 @@ function* fetchDataCenters() {
   let endpoint = `/data-center-facilities`;
 
   try {
-    const payload = yield call(dataCentersApiRequest, endpoint);
+    const payload = yield call(fetchDataCentersApiRequest, endpoint);
     yield put({ type: 'DATA_CENTERS_FETCH_SUCCEEDED', payload });
   } catch (err) {
     yield put({ type: 'DATA_CENTERS_FETCH_FAILED' });
