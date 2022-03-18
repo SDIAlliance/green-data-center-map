@@ -95,3 +95,11 @@ export function useConditionalSolarDataPolling() {
     return () => clearInterval(pollInterval);
   }, [solarEnabled, customDatetime]);
 }
+
+export function requestDataCenters() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({ type: 'DATA_CENTERS_FETCH_REQUESTED' });
+  }, []);
+}

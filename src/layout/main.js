@@ -21,6 +21,7 @@ import { isNewClientVersion } from '../helpers/environment';
 import { useCustomDatetime, useHeaderVisible } from '../hooks/router';
 import { useLoadingOverlayVisible } from '../hooks/redux';
 import {
+  requestDataCenters,
   useGridDataPolling,
   useConditionalWindDataPolling,
   useConditionalSolarDataPolling,
@@ -72,6 +73,9 @@ const Main = ({
 
   // Poll solar data if the toggle is enabled.
   useConditionalSolarDataPolling();
+
+  // Fetch data centers data as soon as the app is mounted
+  requestDataCenters()
 
   const { data: clientVersionData } = useSWR('/clientVersion', fetcher, {refreshInterval: CLIENT_VERSION_CHECK_INTERVAL})
   const clientVersion = clientVersionData && clientVersionData.version;
