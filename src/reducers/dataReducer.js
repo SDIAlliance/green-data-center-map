@@ -41,10 +41,12 @@ Object.entries(exchanges).forEach((entry) => {
 
 const initialDataState = {
   // Here we will store data items
+  dataCenters: [],
   grid: { zones, exchanges },
   hasConnectionWarning: false,
   hasInitializedGrid: false,
   histories: {},
+  isLoadingDataCenters: false,
   isLoadingHistories: false,
   isLoadingGrid: false,
   isLoadingSolar: false,
@@ -57,6 +59,22 @@ const initialDataState = {
 
 module.exports = (state = initialDataState, action) => {
   switch (action.type) {
+    case 'DATA_CENTERS_FETCH_REQUESTED': {
+      return { ...state, isLoadingDataCenters: true };
+    }
+
+    case 'DATA_CENTERS_FETCH_SUCCEEDED': {
+      return {
+        ...state,
+        isLoadingDataCenters: false,
+        dataCenters: action.payload,
+      };
+    }
+
+    case 'DATA_CENTERS_FETCH_FAILED': {
+      return { ...state, isLoadingDataCenters: false };
+    }
+
     case 'GRID_DATA_FETCH_REQUESTED': {
       return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
     }
