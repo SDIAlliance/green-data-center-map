@@ -6,6 +6,7 @@ import {
 } from 'redux-saga/effects';
 
 import thirdPartyServices from '../services/thirdparty';
+import { dataCentersApiRequest } from '../helpers/data-center-api';
 import { handleRequestError, protectedJsonRequest } from '../helpers/api';
 import { history } from '../helpers/router';
 import {
@@ -100,8 +101,21 @@ function* trackEvent(action) {
   );
 }
 
+function* fetchDataCenters() {
+  let endpoint = `/data-center-facilities`;
+
+  try {
+    const payload = yield call(dataCentersApiRequest, endpoint);
+    yield put({ type: 'DATA_CENTERS_FETCH_SUCCEEDED', payload });
+  } catch (err) {
+    yield put({ type: 'DATA_CENTERS_FETCH_FAILED' });
+    handleRequestError(err);
+  }
+}
+
 export default function* () {
   // Data fetching
+  yield takeLatest('DATA_CENTERS_FETCH_REQUESTED', fetchDataCenters)
   yield takeLatest('GRID_DATA_FETCH_REQUESTED', fetchGridData);
   yield takeLatest('WIND_DATA_FETCH_REQUESTED', fetchWindData);
   yield takeLatest('SOLAR_DATA_FETCH_REQUESTED', fetchSolarData);
