@@ -14,7 +14,6 @@ const CountryTableHeaderInner = styled.div`
 
 const TooltipContent = React.memo(
   ({ data }) => {
-    console.log(data);
     if (!data) {
       return (
         <div className="no-parser-text">
@@ -30,14 +29,35 @@ const TooltipContent = React.memo(
       );
     }
 
+    const {
+      id,
+      totalElectricalCapacity
+    } = data;
+
     return (
       <div className="zone-details">
         <CountryTableHeaderInner>
           <div className="data-center-row data-center-wrap">
-            <div className="data-center-row-headline">ID</div>
-            <div className="data-center-row-subtext">
-              {data}
-            </div>
+            {Boolean(id) && (
+              <>
+                <div className="data-center-row-headline">
+                  ID
+                </div>
+                <div className="data-center-row-subtext">
+                  {id}
+                </div>
+              </>
+            )}
+            {totalElectricalCapacity >= 0 && (
+              <>
+                <div className="data-center-row-headline">
+                  Total Electrical Capacity
+                </div>
+                <div className="data-center-row-subtext">
+                  {totalElectricalCapacity}
+                </div>
+              </>
+            )}
           </div>
         </CountryTableHeaderInner>
       </div>
@@ -45,19 +65,22 @@ const TooltipContent = React.memo(
   }
 );
 
-const DataCenterTooltip = ({ position, dataCenterData, onClose }) => {
+const DataCenterTooltip = ({ dataCenterData, onClose, position }) => {
   if (!dataCenterData) return null;
 
-  const { id } = dataCenterData;
-
   return (
-    <Tooltip id="data-center-tooltip" position={position} onClose={onClose}>
+    <Tooltip
+      id="data-center-tooltip"
+      position={position}
+      onClose={onClose}
+    >
       <div className="zone-name-header">
-        <ZoneName zone="Data center" ellipsify />
+        <ZoneName
+          ellipsify
+          zone="Data center"
+        />
       </div>
-      <TooltipContent
-        data={id}
-      />
+      <TooltipContent data={dataCenterData} />
     </Tooltip>
   );
 };
