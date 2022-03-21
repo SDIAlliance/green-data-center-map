@@ -102,7 +102,7 @@ function* trackEvent(action) {
 }
 
 function* fetchDataCenters() {
-  let endpoint = `/data-center-facilities`;
+  const endpoint = `/data-center-facilities`;
 
   try {
     const payload = yield call(fetchDataCentersApiRequest, endpoint);
