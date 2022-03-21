@@ -30,7 +30,6 @@ const TooltipContent = React.memo(
     }
 
     const {
-      id,
       totalElectricalCapacity
     } = data;
 
@@ -38,16 +37,6 @@ const TooltipContent = React.memo(
       <div className="zone-details">
         <CountryTableHeaderInner>
           <div className="data-center-row data-center-wrap">
-            {Boolean(id) && (
-              <>
-                <div className="data-center-row-headline">
-                  ID
-                </div>
-                <div className="data-center-row-subtext">
-                  {id}
-                </div>
-              </>
-            )}
             {totalElectricalCapacity >= 0 && (
               <>
                 <div className="data-center-row-headline">
@@ -77,7 +66,7 @@ const DataCenterTooltip = ({ dataCenterData, onClose, position }) => {
       <div className="zone-name-header">
         <ZoneName
           ellipsify
-          zone="Data center"
+          zone={dataCenterData.alias}
         />
       </div>
       <TooltipContent data={dataCenterData} />

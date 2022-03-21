@@ -88,13 +88,13 @@ const DataCenterCompare = ({ dataCenters, isDataCenterCompareCollapsed }) => {
 
       {Array.isArray(dataCenters) && Boolean(dataCenters.length) && dataCenters.map(dataCenter => (
         <div key={dataCenter.id}>
-          {Boolean(dataCenter.id) && (
+          {Boolean(dataCenter.alias) && (
             <>
               <div className="data-center-row-headline">
-                ID
+                Name
               </div>
               <div className="data-center-row-subtext">
-                {dataCenter.id}
+                {dataCenter.alias}
               </div>
             </>
           )}
