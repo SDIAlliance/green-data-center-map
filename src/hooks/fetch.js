@@ -96,7 +96,7 @@ export function useConditionalSolarDataPolling() {
   }, [solarEnabled, customDatetime]);
 }
 
-export function requestDataCenters() {
+export function useRequestDataCenters() {
   const dispatch = useDispatch();
 
   useEffect(() => {
