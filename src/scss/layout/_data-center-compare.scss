@@ -1,0 +1,76 @@
+.panel {
+  background-color: $light-gray;
+  color: black;
+  font-size: 0.8rem;
+}
+
+/* Data-center collapse button */
+#data-center-compare-collapse-button {
+  right: 1rem;
+  top: 1rem;
+  position: absolute;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: $lighter-gray;
+  width: 3rem;
+  height: 3rem;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  outline: 0;
+
+  @include respond-to('small') {
+      display: none;
+  }
+}
+
+.data-center-left-panel {
+  color: $black;
+  padding: 3rem;
+  width: calc(14vw + 16rem);
+  background-color: $lighter-gray;
+  position: absolute;
+  box-shadow: 0 24px 15px rgba(0,0,0,0.2);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: transform 0.4s, box-shadow 0.4s;
+
+  &.collapsed {
+      transform: translate(-100%);
+      box-shadow: 0 24px 15px rgba(0,0,0,0);
+  }
+
+  h1 {
+      line-height: 1.3;
+      color: black;
+      font-size: 1.6em;
+      margin: 0;
+  }
+
+  & > svg {
+      display: block;
+  }
+
+  &.text {
+      color: $black;
+  }
+
+  .title {
+      font-size: 1.3rem;
+      font-family: $headline-font;
+  }
+
+  @include respond-to('medium-up') {
+      height: 100%; /* Should only be set on desktop */
+  }
+
+  @include respond-to('small') {
+      padding-bottom: 0;
+      position: relative;
+      width: 100%;
+  }
+}
