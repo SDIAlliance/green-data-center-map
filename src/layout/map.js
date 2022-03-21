@@ -16,6 +16,7 @@ import { useTrackEvent } from '../hooks/tracking';
 import { dispatchApplication } from '../store';
 
 import DataCenterTooltip from '../components/tooltips/data-center-tooltip';
+import DataCenterCompare from './data-center-compare';
 import ZoneMap from '../components/zonemap';
 import MapLayer from '../components/maplayer';
 import MapCountryTooltip from '../components/tooltips/mapcountrytooltip';
@@ -46,6 +47,7 @@ export default () => {
   const zoneId = getZoneId();
   const theme = useTheme();
 
+  const [dataCentersToCompare, setDataCentersToCompare] = useState([]);
   const [tooltipPosition, setTooltipPosition] = useState(null);
   const [tooltipZoneData, setTooltipZoneData] = useState(null);
   const [tooltipDataCenterData, setTooltipDataCenterData] = useState(null);
@@ -119,11 +121,16 @@ export default () => {
   );
 
   const handleDataCenterClick = useMemo(
-    () => (id) => {
-      console.log(id);
-      dispatchApplication('isLeftPanelCollapsed', true);
+    () => (data) => {
+      if (data) {
+        dispatchApplication('isLeftPanelCollapsed', true);
+        dispatchApplication('isDataCenterCompareCollapsed', false);
+      }
+
+      const dataCenterAlreadyExists = Boolean(dataCentersToCompare.find(entry => entry.dataCenterId === data.dataCenterId));
+      if(!dataCenterAlreadyExists) setDataCentersToCompare(prevState => ([...prevState, data]));
     },
-    [],
+    [dataCentersToCompare],
   );
 
   const handleDataCenterMouseEnter = useMemo(
@@ -148,6 +155,7 @@ export default () => {
   const handleZoneClick = useMemo(
     () => (id) => {
       trackEvent('countryClick');
+      dispatchApplication('isDataCenterCompareCollapsed', true);
       dispatchApplication('isLeftPanelCollapsed', false);
       history.push({ pathname: `/zone/${id}`, search: location.search });
     },
@@ -254,6 +262,7 @@ export default () => {
         <MapLayer component={ExchangeLayer} />
         <MapLayer component={WindLayer} />
         <MapLayer component={SolarLayer} />
+        <DataCenterCompare dataCenters={dataCentersToCompare} />
       </ZoneMap>
     </React.Fragment>
   );

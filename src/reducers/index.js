@@ -30,6 +30,7 @@ const initialApplicationState = {
   // be stopped from propagating mouse move events to the map.
   // See https://github.com/visgl/react-map-gl/blob/master/docs/advanced/custom-components.md
   isHoveringExchange: false,
+  isDataCenterCompareCollapsed: true,
   isLeftPanelCollapsed: false,
   isMovingMap: false,
   isLoadingMap: true,

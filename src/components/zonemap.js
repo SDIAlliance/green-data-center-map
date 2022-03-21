@@ -134,7 +134,7 @@ const ZoneMap = ({
   // to keep the stable and prevent excessive rerendering.
   const styles = useMemo(
     () => ({
-      dataCenters: { 'circle-color': 'orange', 'circle-radius': 40 },
+      dataCenters: { 'circle-color': 'orange', 'circle-radius': 10 },
       hover: { 'fill-color': 'white', 'fill-opacity': 0.3 },
       ocean: { 'background-color': theme.oceanColor },
       zonesBorder: { 'line-color': theme.strokeColor, 'line-width': theme.strokeWidth },
@@ -162,13 +162,13 @@ const ZoneMap = ({
         if (isEmpty(features)) {
           onSeaClick();
         } else if (features[0].properties.dataCenterId) {
-          onDataCenterClick(features[0].properties);
+          onDataCenterClick(dataCenters.find(dataCenter => dataCenter.id === features[0].properties.dataCenterId));
         } else {
           onZoneClick(features[0].properties.zoneId);
         }
       }
     },
-    [ref.current, onSeaClick, onZoneClick, onDataCenterClick],
+    [ref, dataCenters, onSeaClick, onZoneClick, onDataCenterClick],
   );
 
   const handleMouseMove = useMemo(
@@ -188,16 +188,19 @@ const ZoneMap = ({
           // Trigger onZoneMouseEnter if mouse enters a different
           // zone and onZoneMouseLeave when it leaves all zones.
           if (!isEmpty(features) && hoveringEnabled) {
-            const { dataCenterId } = features[0].properties;
-            const { zoneId } = features[0].properties;
+            const { dataCenterId, zoneId } = features[0].properties;
             if (zoneId) {
               if (hoveredZoneId !== zoneId) {
+                onDataCenterMouseLeave();
+                setHoveredDataCenterId(null);
                 onZoneMouseEnter(zones[zoneId], zoneId);
                 setHoveredZoneId(zoneId);
               }
             } else if (dataCenterId) {
               if (hoveredDataCenterId !== dataCenterId) {
-                onDataCenterMouseEnter(dataCenters.find(dataCenter => dataCenter.id === dataCenterId), dataCenterId);
+                onZoneMouseLeave();
+                setHoveredZoneId(null);
+                onDataCenterMouseEnter(dataCenters.find(dataCenter => dataCenter.id === dataCenterId));
                 setHoveredDataCenterId(dataCenterId);
               }
             }
@@ -210,7 +213,7 @@ const ZoneMap = ({
         }
       }
     },
-    [ref.current, hoveringEnabled, isDragging, zones, hoveredZoneId, onMouseMove, onZoneMouseEnter, onZoneMouseLeave, dataCenters, hoveredDataCenterId, onDataCenterMouseEnter, onDataCenterMouseLeave],
+    [ref, hoveringEnabled, isDragging, zones, hoveredZoneId, onMouseMove, onZoneMouseEnter, onZoneMouseLeave, dataCenters, hoveredDataCenterId, onDataCenterMouseEnter, onDataCenterMouseLeave],
   );
 
   const handleMouseOut = useMemo(
@@ -225,6 +228,7 @@ const ZoneMap = ({
         setHoveredDataCenterId(null);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [hoveredZoneId, hoveredDataCenterId],
   );
 
