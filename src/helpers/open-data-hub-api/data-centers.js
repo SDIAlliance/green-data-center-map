@@ -24,6 +24,7 @@ export function fetchDataCentersApiRequest(path) {
 
   return new Promise((resolve, reject) => {
     request.json(url)
+      .header('Prefer', 'code=200, dynamic=true')
       .get(null, (err, res) => {
         if (err) {
           reject(err);
