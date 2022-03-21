@@ -85,9 +85,8 @@ module.exports = (state = initialDataState, action) => {
               totalElectricalCapacity: dataCenter.total_electrical_capacity,
               updatedAt: dataCenter.updated_at
             }
-          )
-        ) :
-        [],
+          )) :
+          null,
       };
     }
 
