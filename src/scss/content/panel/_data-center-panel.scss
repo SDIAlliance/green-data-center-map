@@ -4,8 +4,11 @@
   font-weight: 700;
   padding: 0.75em 0 0 0;
   line-height: 1.25em;
-  margin-top: 1rem;
   margin-bottom: auto;
+}
+
+.data-center-row-headline:not(:first-of-type) {
+  margin-top: 1rem;
 }
 
 .data-center-row {
