@@ -15,11 +15,12 @@ import {
 } from 'lodash';
 import { __ } from '../helpers/translation';
 
-const interactiveLayerIds = ['zones-clickable'];
+const interactiveLayerIds = ['zones-clickable', 'data-center'];
 const mapStyle = { version: 8, sources: {}, layers: [] };
 
 const ZoneMap = ({
   children = null,
+  dataCenters = null,
   hoveringEnabled = true,
   onMapLoaded = noop,
   onMapError = noop,
@@ -27,6 +28,9 @@ const ZoneMap = ({
   onResize = noop,
   onSeaClick = noop,
   onViewportChange = noop,
+  onDataCenterClick = noop,
+  onDataCenterMouseEnter = noop,
+  onDataCenterMouseLeave = noop,
   onZoneClick = noop,
   onZoneMouseEnter = noop,
   onZoneMouseLeave = noop,
@@ -43,6 +47,7 @@ const ZoneMap = ({
 }) => {
   const ref = useRef(null);
   const wrapperRef = useRef(null);
+  const [hoveredDataCenterId, setHoveredDataCenterId] = useState(null);
   const [hoveredZoneId, setHoveredZoneId] = useState(null);
   const [isSupported, setIsSupported] = useState(true);
 
@@ -96,6 +101,32 @@ const ZoneMap = ({
     [zones],
   );
 
+  // Generate sources based on the data centers data.
+  const dataCentersSources = useMemo(
+    () => {
+      const features = map(dataCenters, dataCenter => ({
+        type: 'Feature',
+        geometry: {
+          coordinates: [dataCenter.geo_lat, dataCenter.geo_lon],
+          type: 'Point'
+        },
+        properties: {
+          isClickable: true,
+          dataCenterData: dataCenter,
+          dataCenterId: dataCenter.id,
+        },
+      }));
+
+      return {
+        dataCenters: {
+          type: 'FeatureCollection',
+          features
+        }
+      };
+    },
+    [dataCenters],
+  );
+
   // Every time the hovered zone changes, update the hover map layer accordingly.
   const hoverFilter = useMemo(() => (['==', 'zoneId', hoveredZoneId || '']), [hoveredZoneId]);
 
@@ -103,6 +134,7 @@ const ZoneMap = ({
   // to keep the stable and prevent excessive rerendering.
   const styles = useMemo(
     () => ({
+      dataCenters: { 'circle-color': 'orange', 'circle-radius': 40 },
       hover: { 'fill-color': 'white', 'fill-opacity': 0.3 },
       ocean: { 'background-color': theme.oceanColor },
       zonesBorder: { 'line-color': theme.strokeColor, 'line-width': theme.strokeWidth },
@@ -129,12 +161,14 @@ const ZoneMap = ({
         const features = ref.current.queryRenderedFeatures(e.point);
         if (isEmpty(features)) {
           onSeaClick();
+        } else if (features[0].properties.dataCenterId) {
+          onDataCenterClick(features[0].properties);
         } else {
           onZoneClick(features[0].properties.zoneId);
         }
       }
     },
-    [ref.current, onSeaClick, onZoneClick],
+    [ref.current, onSeaClick, onZoneClick, onDataCenterClick],
   );
 
   const handleMouseMove = useMemo(
@@ -154,19 +188,29 @@ const ZoneMap = ({
           // Trigger onZoneMouseEnter if mouse enters a different
           // zone and onZoneMouseLeave when it leaves all zones.
           if (!isEmpty(features) && hoveringEnabled) {
+            const { dataCenterId } = features[0].properties;
             const { zoneId } = features[0].properties;
-            if (hoveredZoneId !== zoneId) {
-              onZoneMouseEnter(zones[zoneId], zoneId);
-              setHoveredZoneId(zoneId);
+            if (zoneId) {
+              if (hoveredZoneId !== zoneId) {
+                onZoneMouseEnter(zones[zoneId], zoneId);
+                setHoveredZoneId(zoneId);
+              }
+            } else if (dataCenterId) {
+              if (hoveredDataCenterId !== dataCenterId) {
+                onDataCenterMouseEnter(dataCenters.find(dataCenter => dataCenter.id === dataCenterId), dataCenterId);
+                setHoveredDataCenterId(dataCenterId);
+              }
             }
-          } else if (hoveredZoneId !== null) {
+          } else if (hoveredZoneId !== null || hoveredDataCenterId !== null) {
+            onDataCenterMouseLeave();
             onZoneMouseLeave();
             setHoveredZoneId(null);
+            setHoveredDataCenterId(null);
           }
         }
       }
     },
-    [ref.current, hoveringEnabled, isDragging, zones, hoveredZoneId, onMouseMove, onZoneMouseEnter, onZoneMouseLeave],
+    [ref.current, hoveringEnabled, isDragging, zones, hoveredZoneId, onMouseMove, onZoneMouseEnter, onZoneMouseLeave, dataCenters, hoveredDataCenterId, onDataCenterMouseEnter, onDataCenterMouseLeave],
   );
 
   const handleMouseOut = useMemo(
@@ -175,8 +219,13 @@ const ZoneMap = ({
         onZoneMouseLeave();
         setHoveredZoneId(null);
       }
+
+      if (hoveredDataCenterId !== null) {
+        onDataCenterMouseLeave();
+        setHoveredDataCenterId(null);
+      }
     },
-    [hoveredZoneId],
+    [hoveredZoneId, hoveredDataCenterId],
   );
 
   // Don't render map nor any of the layers if WebGL is not supported.
@@ -247,6 +296,12 @@ const ZoneMap = ({
         </Source>
         <Source type="geojson" data={sources.zonesClickable}>
           <Layer id="hover" type="fill" paint={styles.hover} filter={hoverFilter} />
+        </Source>
+        <Source
+          data={dataCentersSources.dataCenters}
+          type="geojson"
+        >
+          <Layer id="data-center" type="circle" paint={styles.dataCenters} />
         </Source>
         {/* Extra layers provided by user */}
         {children}

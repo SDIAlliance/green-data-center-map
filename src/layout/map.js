@@ -15,6 +15,7 @@ import { useZonesWithColors } from '../hooks/map';
 import { useTrackEvent } from '../hooks/tracking';
 import { dispatchApplication } from '../store';
 
+import DataCenterTooltip from '../components/tooltips/data-center-tooltip';
 import ZoneMap from '../components/zonemap';
 import MapLayer from '../components/maplayer';
 import MapCountryTooltip from '../components/tooltips/mapcountrytooltip';
@@ -25,6 +26,7 @@ import WindLayer from '../components/layers/windlayer';
 const debouncedReleaseMoving = debounce(() => { dispatchApplication('isMovingMap', false); }, 200);
 
 export default () => {
+  const dataCenters = useSelector(state => state.data.dataCenters);
   const webGLSupported = useSelector(state => state.application.webGLSupported);
   const isHoveringExchange = useSelector(state => state.application.isHoveringExchange);
   const electricityMixMode = useSelector(state => state.application.electricityMixMode);
@@ -46,6 +48,7 @@ export default () => {
 
   const [tooltipPosition, setTooltipPosition] = useState(null);
   const [tooltipZoneData, setTooltipZoneData] = useState(null);
+  const [tooltipDataCenterData, setTooltipDataCenterData] = useState(null);
 
   const handleMapLoaded = useMemo(
     () => () => {
@@ -113,6 +116,33 @@ export default () => {
       history.push({ pathname: '/map', search: location.search });
     },
     [history, location],
+  );
+
+  const handleDataCenterClick = useMemo(
+    () => (id) => {
+      console.log(id);
+      dispatchApplication('isLeftPanelCollapsed', true);
+    },
+    [],
+  );
+
+  const handleDataCenterMouseEnter = useMemo(
+    () => (data) => {
+      dispatchApplication(
+        'dataCenterInfo',
+         data
+      );
+      setTooltipDataCenterData(data);
+    },
+    [],
+  );
+
+  const handleDataCenterMouseLeave = useMemo(
+    () => () => {
+      dispatchApplication('dataCenterInfo', null);
+      setTooltipDataCenterData(null);
+    },
+    [],
   );
 
   const handleZoneClick = useMemo(
@@ -193,7 +223,15 @@ export default () => {
           onClose={() => setTooltipZoneData(null)}
         />
       )}
+      {tooltipPosition && tooltipDataCenterData && hoveringEnabled && (
+        <DataCenterTooltip
+          dataCenterData={tooltipDataCenterData}
+          position={tooltipPosition}
+          onClose={() => setTooltipDataCenterData(null)}
+        />
+      )}
       <ZoneMap
+        dataCenters={dataCenters}
         hoveringEnabled={hoveringEnabled}
         onMapLoaded={handleMapLoaded}
         onMapError={handleMapError}
@@ -201,6 +239,9 @@ export default () => {
         onResize={handleResize}
         onSeaClick={handleSeaClick}
         onViewportChange={handleViewportChange}
+        onDataCenterClick={handleDataCenterClick}
+        onDataCenterMouseEnter={handleDataCenterMouseEnter}
+        onDataCenterMouseLeave={handleDataCenterMouseLeave}
         onZoneClick={handleZoneClick}
         onZoneMouseEnter={handleZoneMouseEnter}
         onZoneMouseLeave={handleZoneMouseLeave}
