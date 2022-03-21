@@ -67,7 +67,25 @@ module.exports = (state = initialDataState, action) => {
       return {
         ...state,
         isLoadingDataCenters: false,
-        dataCenters: action.payload,
+        dataCenters: Array.isArray(action?.payload) ?
+          action.payload.map(dataCenter => ({
+            ...dataCenter,
+            consentToOpenData: dataCenter?.consent_to_open_data,
+            createdAt: dataCenter.created_at,
+            energyInputRestEndpoint: dataCenter.energy_input_rest_endpoint,
+            energyInputStreamEndpoint: dataCenter.energy_input_stream_endpoint,
+            energyInputStreamTopic: dataCenter.energy_input_stream_topic,
+            energyOutputRestEndpoint: dataCenter.energy_output_rest_endpoint,
+            energyOutputStreamEndpoint: dataCenter.energy_output_stream_endpoint,
+            energyOutputStreamTopic: dataCenter.energy_output_stream_topic,
+            equipmentInventoryRestEndpoint: dataCenter.equipment_inventory_rest_endpoint,
+            lat: dataCenter.geo_lat,
+            lng: dataCenter.geo_lon,
+            totalElectricalCapacity: dataCenter.total_electrical_capacity,
+            updatedAt: dataCenter.updated_at
+          })
+        ) :
+        [],
       };
     }
 
