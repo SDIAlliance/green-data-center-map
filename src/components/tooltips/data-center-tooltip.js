@@ -1,16 +1,8 @@
 import React from 'react';
 
 import { __ } from '../../helpers/translation';
-import styled from 'styled-components';
 
 import Tooltip from '../tooltip';
-import { ZoneName } from './common';
-
-const CountryTableHeaderInner = styled.div`
-  display: flex;
-  flex-basis: 33.3%;
-  justify-content: space-between;
-`;
 
 const TooltipContent = React.memo(
   ({ data }) => {
@@ -34,21 +26,17 @@ const TooltipContent = React.memo(
     } = data;
 
     return (
-      <div className="zone-details">
-        <CountryTableHeaderInner>
-          <div className="data-center-wrap">
-            {totalElectricalCapacity >= 0 && (
-              <div className="row">
-                <div className="headline">
-                  Total Electrical Capacity
-                </div>
-                <div className="subtext">
-                  {totalElectricalCapacity}
-                </div>
-              </div>
-            )}
+      <div className="data-center-wrap">
+        {totalElectricalCapacity >= 0 && (
+          <div className="data-center-wrap__row">
+            <div className="data-center-wrap__headline">
+              Total Electrical Capacity
+            </div>
+            <div className="data-center-wrap__description">
+              {totalElectricalCapacity}
+            </div>
           </div>
-        </CountryTableHeaderInner>
+        )}
       </div>
     );
   }
@@ -59,15 +47,11 @@ const DataCenterTooltip = ({ dataCenterData, onClose, position }) => {
 
   return (
     <Tooltip
-      id="data-center-tooltip"
       position={position}
       onClose={onClose}
     >
-      <div className="zone-name-header">
-        <ZoneName
-          ellipsify
-          zone={dataCenterData.alias}
-        />
+      <div>
+        {dataCenterData.alias}
       </div>
       <TooltipContent data={dataCenterData} />
     </Tooltip>
