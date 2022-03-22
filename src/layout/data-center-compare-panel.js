@@ -12,10 +12,20 @@ const mapStateToProps = state => ({
 const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
   const dataCentersToCompare = useSelector(state => state.application.allDataCentersToCompare);
   const [dataCenters, setDataCenters] = useState(null);
+  const [showComparison, setShowComparison] = useState(false);
 
   usePageViewsTracker();
 
   const collapsedClass = isDataCenterComparePanelCollapsed ? 'data-center-compare-panel__collapsed' : '';
+
+  const handleCompareButtonClick = () => {
+    setShowComparison(prevState => !prevState);
+  };
+
+  const handleCloseButtonClick = () => {
+    dispatchApplication('isDataCenterComparePanelCollapsed', true);
+    setShowComparison(false);
+  };
 
   const handleRemoveDataCenterClick = (index) => {
     if (Array.isArray(dataCentersToCompare)) {
@@ -32,6 +42,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
 
       if (!dataCenters.length) {
         dispatchApplication('isDataCenterComparePanelCollapsed', true);
+        setShowComparison(false);
       }
     }
    }, [dataCenters])
@@ -40,7 +51,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
     <div className={`data-center-compare-panel ${collapsedClass}`}>
       <div
         className={`data-center-compare-panel__close ${collapsedClass}`}
-        onClick={() => dispatchApplication('isDataCenterComparePanelCollapsed', true)}
+        onClick={handleCloseButtonClick}
         role="button"
         tabIndex="0"
       >
@@ -52,50 +63,61 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
       {Array.isArray(dataCentersToCompare) && Boolean(dataCentersToCompare.length > 0) && (
         <>
           <div className="data-center-compare-panel__content">
-            {dataCentersToCompare.map((dataCenter, index) => (
-              <div
-                key={dataCenter.id}
-                className="data-center-compare-panel__data-center-box"
-              >
-                <div
-                  className="data-center-compare-panel__remove-data-center"
-                  onClick={() => handleRemoveDataCenterClick(index)}
-                  role="button"
-                  tabIndex="0"
-                >
-                  <i className="material-icons">
-                    close
-                  </i>
-                </div>
-                {Boolean(dataCenter.alias) && (
-                  <div className="data-center-compare-panel__row">
-                    <div className="data-center-compare-panel__headline">
-                      Name
-                    </div>
-                    <div className="data-center-compare-panel__subtext">
-                      {dataCenter.alias}
-                    </div>
-                  </div>
-                )}
-                {dataCenter.totalElectricalCapacity >= 0 && (
-                  <div className="data-center-compare-panel__row">
-                    <div className="data-center-compare-panel__headline">
-                      Total Electrical Capacity
-                    </div>
-                    <div className="data-center-compare-panel__subtext">
-                      {dataCenter.totalElectricalCapacity}
-                    </div>
-                  </div>
-                )}
+            {showComparison ?
+            (
+              <div>
+                Data Center Comparison
               </div>
-            ))}
+            ) :
+            (
+              <>
+                {dataCentersToCompare.map((dataCenter, index) => (
+                  <div
+                    key={dataCenter.id}
+                    className="data-center-compare-panel__data-center-box"
+                  >
+                    <div
+                      className="data-center-compare-panel__remove-data-center"
+                      onClick={() => handleRemoveDataCenterClick(index)}
+                      role="button"
+                      tabIndex="0"
+                    >
+                      <i className="material-icons">
+                        close
+                      </i>
+                    </div>
+                    {Boolean(dataCenter.alias) && (
+                      <div className="data-center-compare-panel__row">
+                        <div className="data-center-compare-panel__headline">
+                          Name
+                        </div>
+                        <div className="data-center-compare-panel__subtext">
+                          {dataCenter.alias}
+                        </div>
+                      </div>
+                    )}
+                    {dataCenter.totalElectricalCapacity >= 0 && (
+                      <div className="data-center-compare-panel__row">
+                        <div className="data-center-compare-panel__headline">
+                          Total Electrical Capacity
+                        </div>
+                        <div className="data-center-compare-panel__subtext">
+                          {dataCenter.totalElectricalCapacity}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
           </div>
 
           <button
             className="data-center-compare-panel__button"
             disabled={dataCentersToCompare.length < 2}
+            onClick={handleCompareButtonClick}
           >
-            Compare
+            {showComparison ? 'Go back' : 'Compare'}
           </button>
         </>
       )}
