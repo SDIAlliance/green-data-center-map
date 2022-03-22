@@ -1,7 +1,6 @@
 .data-center-row-headline {
   font-size: 0.85em;
   font-weight: 700;
-  padding: 0.75em 0 0 0;
   line-height: 1.25em;
   margin-bottom: auto;
 }
@@ -12,9 +11,9 @@
 
 .data-center-row {
   width: 100%;
+  padding: 0.75em 0 0 0;
 
   .data-center-row-headline + div {
-      margin-top: 0.375rem;
   }
 
   .data-center-row-subtext {

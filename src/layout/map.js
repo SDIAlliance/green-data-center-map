@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { debounce } from 'lodash';
@@ -16,7 +16,6 @@ import { useTrackEvent } from '../hooks/tracking';
 import { dispatchApplication } from '../store';
 
 import DataCenterTooltip from '../components/tooltips/data-center-tooltip';
-import DataCenterCompare from './data-center-compare';
 import ZoneMap from '../components/zonemap';
 import MapLayer from '../components/maplayer';
 import MapCountryTooltip from '../components/tooltips/mapcountrytooltip';
@@ -128,7 +127,9 @@ export default () => {
       }
 
       const dataCenterAlreadyExists = Boolean(dataCentersToCompare.find(entry => entry.dataCenterId === data.dataCenterId));
-      if(!dataCenterAlreadyExists) setDataCentersToCompare(prevState => ([...prevState, data]));
+      if (!dataCenterAlreadyExists) {
+        setDataCentersToCompare(prevState => ([...prevState, data]));
+      }
     },
     [dataCentersToCompare],
   );
@@ -217,6 +218,12 @@ export default () => {
   const transitionDuration = isLoadingMap ? 0 : 300;
   const hoveringEnabled = !isHoveringExchange && !isMobile;
 
+  useEffect(() => {
+    if (dataCentersToCompare) {
+      dispatchApplication('allDataCentersToCompare', dataCentersToCompare);
+    }
+  }, [dataCentersToCompare])
+
   return (
     <React.Fragment>
       <div id="webgl-error" className={`flash-message ${!webGLSupported ? 'active' : ''}`}>
@@ -262,7 +269,6 @@ export default () => {
         <MapLayer component={ExchangeLayer} />
         <MapLayer component={WindLayer} />
         <MapLayer component={SolarLayer} />
-        <DataCenterCompare dataCenters={dataCentersToCompare} />
       </ZoneMap>
     </React.Fragment>
   );

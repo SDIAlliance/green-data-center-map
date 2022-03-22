@@ -15,6 +15,7 @@ const cookieGetBool = (key, defaultValue) => {
 
 const initialApplicationState = {
   // Here we will store non-data specific state (to be sent in analytics and crash reporting)
+  allDataCentersToCompare: [],
   bundleHash: window.bundleHash,
   callerLocation: null,
   callerZone: null,

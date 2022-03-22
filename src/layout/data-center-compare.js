@@ -5,7 +5,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import { dispatchApplication } from '../store';
 import { usePageViewsTracker } from '../hooks/tracking';
@@ -54,7 +54,8 @@ const Container = styled.div`
   }
 `;
 
-const DataCenterCompare = ({ dataCenters, isDataCenterCompareCollapsed }) => {
+const DataCenterCompare = ({ isDataCenterCompareCollapsed }) => {
+  const dataCenters = useSelector(state => state.application.allDataCentersToCompare);
   const isLoaderVisible = useSmallLoaderVisible();
 
   usePageViewsTracker();
@@ -86,30 +87,46 @@ const DataCenterCompare = ({ dataCenters, isDataCenterCompareCollapsed }) => {
         <i className="material-icons">close</i>
       </DataCenterCompareCollapseButton>
 
-      {Array.isArray(dataCenters) && Boolean(dataCenters.length) && dataCenters.map(dataCenter => (
-        <div key={dataCenter.id}>
-          {Boolean(dataCenter.alias) && (
-            <>
-              <div className="data-center-row-headline">
-                Name
+      {Array.isArray(dataCenters) && Boolean(dataCenters.length) && (
+        <>
+          <div className="content">
+            {dataCenters.map(dataCenter => (
+              <div
+                key={dataCenter.id}
+                className="box"
+              >
+                {Boolean(dataCenter.alias) && (
+                  <>
+                    <div className="data-center-row-headline">
+                      Name
+                    </div>
+                    <div className="data-center-row-subtext">
+                      {dataCenter.alias}
+                    </div>
+                  </>
+                )}
+                {dataCenter.totalElectricalCapacity >= 0 && (
+                  <>
+                    <div className="data-center-row-headline">
+                      Total Electrical Capacity
+                    </div>
+                    <div className="data-center-row-subtext">
+                      {dataCenter.totalElectricalCapacity}
+                    </div>
+                  </>
+                )}
               </div>
-              <div className="data-center-row-subtext">
-                {dataCenter.alias}
-              </div>
-            </>
-          )}
-          {dataCenter.totalElectricalCapacity >= 0 && (
-            <>
-              <div className="data-center-row-headline">
-                Total Electrical Capacity
-              </div>
-              <div className="data-center-row-subtext">
-                {dataCenter.totalElectricalCapacity}
-              </div>
-            </>
-          )}
-        </div>
-      ))}
+            ))}
+          </div>
+
+          <button
+            className="button"
+            disabled={dataCenters.length < 2}
+          >
+            Compare Data Centers
+          </button>
+        </>
+      )}
     </Container>
   );
 };
