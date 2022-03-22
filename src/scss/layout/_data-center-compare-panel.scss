@@ -19,6 +19,7 @@
   &__button {
     width: 200px;
     margin-top: 2rem;
+    margin-bottom: 2rem;
     margin-left: auto;
     margin-right: auto;
     padding: 1rem;
@@ -59,10 +60,8 @@
 
   // .data-center-compare-panel__content
   &__content {
-    overflow-x: visible;
     overflow-y: auto;
     padding: 0 3rem 3rem;
-    max-height: 75%;
   }
 
   // .data-center-compare-panel__data-center-box
