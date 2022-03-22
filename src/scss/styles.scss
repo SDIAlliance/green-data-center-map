@@ -9,11 +9,11 @@
 
 @import "content/map/map";
 @import "content/map/controls";
-@import "content/panel/data-center-panel";
 @import "content/panel/country-panel";
 @import "content/panel/time-slider";
 @import "content/panel/zone-list";
 
+@import "components/data-center-tooltip";
 @import "components/faqs";
 @import "components/messaging";
 @import "components/modal";

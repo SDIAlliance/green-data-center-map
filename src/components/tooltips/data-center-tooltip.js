@@ -36,16 +36,16 @@ const TooltipContent = React.memo(
     return (
       <div className="zone-details">
         <CountryTableHeaderInner>
-          <div className="data-center-row data-center-wrap">
+          <div className="data-center-wrap">
             {totalElectricalCapacity >= 0 && (
-              <>
-                <div className="data-center-row-headline">
+              <div className="row">
+                <div className="headline">
                   Total Electrical Capacity
                 </div>
-                <div className="data-center-row-subtext">
+                <div className="subtext">
                   {totalElectricalCapacity}
                 </div>
-              </>
+              </div>
             )}
           </div>
         </CountryTableHeaderInner>
