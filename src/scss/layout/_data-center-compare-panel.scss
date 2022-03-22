@@ -7,7 +7,7 @@
   background-color: $lighter-gray;
   box-shadow: 0 24px 15px rgba(0,0,0,0.2);
   box-sizing: border-box;
-  transition: transform 0.4s, box-shadow 0.4s;
+  transition: transform 0.4s, box-shadow 0.4s, width 0.4s;
   z-index: 2;
 
   // .data-center-compare-panel__box:not(:last-of-type)
@@ -110,7 +110,26 @@
     font-size: 0.85em;
   }
 
-   // .data-center-compare-panel svg
+  // .data-center-compare-panel__table
+  &__table {
+    margin-top: 3rem;
+    text-align: left;
+    border-collapse: collapse;
+    border-radius: 1em;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  // .data-center-compare-panel__table-row,
+  // .data-center-compare-panel__table-column
+  &__table-row,
+  &__table-column {
+    padding: 1rem;
+    background: #fff;
+    border-bottom: 2px solid $lighter-gray;
+  }
+
+  // .data-center-compare-panel svg
   & > svg {
     display: block;
   }
@@ -123,5 +142,10 @@
     padding-bottom: 0;
     position: relative;
     width: 100%;
+  }
+
+  // .data-center-compare-panel--expanded
+  &--expanded {
+    width: 80%;
   }
 }

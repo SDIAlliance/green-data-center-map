@@ -48,7 +48,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
    }, [dataCenters])
 
   return (
-    <div className={`data-center-compare-panel ${collapsedClass}`}>
+    <div className={`data-center-compare-panel${showComparison ? ' data-center-compare-panel--expanded' : ''} ${collapsedClass}`}>
       <div
         className={`data-center-compare-panel__close ${collapsedClass}`}
         onClick={handleCloseButtonClick}
@@ -66,11 +66,44 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
             {showComparison ?
             (
               <div>
-                Data Center Comparison
+                <h3>
+                  Data Center Comparison
+                </h3>
+                <table className="data-center-compare-panel__table">
+                  <tr className="data-center-compare-panel__table-row">
+                    <td>
+                      &nbsp;
+                    </td>
+                    {dataCentersToCompare.map((dataCenter, index) => (
+                      <th
+                        key={index}
+                        className="data-center-compare-panel__table-column"
+                      >
+                        {dataCenter.alias.value}
+                      </th>
+                    ))}
+                  </tr>
+                  <tr className="data-center-compare-panel__table-row">
+                    <td className="data-center-compare-panel__table-column">
+                      Total Electrical Capacity
+                    </td>
+                    {dataCentersToCompare.map((dataCenter, index) => (
+                      <td
+                        key={index}
+                        className="data-center-compare-panel__table-column"
+                      >
+                        {dataCenter.total_electrical_capacity.value}
+                      </td>
+                    ))}
+                  </tr>
+                </table>
               </div>
             ) :
             (
               <>
+                <h3>
+                  Selected Data Centers
+                </h3>
                 {dataCentersToCompare.map((dataCenter, index) => (
                   <div
                     key={dataCenter.id}
