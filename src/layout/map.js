@@ -123,7 +123,7 @@ export default () => {
     () => (data) => {
       if (data) {
         dispatchApplication('isLeftPanelCollapsed', true);
-        dispatchApplication('isDataCenterCompareCollapsed', false);
+        dispatchApplication('isDataCenterComparePanelCollapsed', false);
       }
 
       const dataCenterAlreadyExists = Boolean(dataCentersToCompare.find(entry => entry.dataCenterId === data.dataCenterId));
@@ -156,7 +156,7 @@ export default () => {
   const handleZoneClick = useMemo(
     () => (id) => {
       trackEvent('countryClick');
-      dispatchApplication('isDataCenterCompareCollapsed', true);
+      dispatchApplication('isDataCenterComparePanelCollapsed', true);
       dispatchApplication('isLeftPanelCollapsed', false);
       history.push({ pathname: `/zone/${id}`, search: location.search });
     },

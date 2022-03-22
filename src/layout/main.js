@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 
 // Layout
 import Header from './header';
-import DataCenterCompare from './data-center-compare';
+import DataCenterComparePanel from './data-center-compare-panel';
 import LayerButtons from './layerbuttons';
 import LeftPanel from './leftpanel';
 import Legend from './legend';
@@ -104,7 +104,7 @@ const Main = ({
           <ErrorBoundary>
           <LoadingOverlay visible={showLoadingOverlay} />
           <LeftPanel />
-          <DataCenterCompare />
+          <DataCenterComparePanel />
             <MapContainer pathname={location.pathname} id="map-container">
               <Map />
               <Legend />
