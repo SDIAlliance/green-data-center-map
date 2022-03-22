@@ -1,6 +1,7 @@
 .data-center-wrap {
   padding: 0.75em 0 0 0;
-  width: 100%;
+  max-width: 450px;
+  word-break: break-all;
 
   // .data-center-wrap .data-center-wrap__headline
   &__headline {
