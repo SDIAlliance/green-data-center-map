@@ -21,22 +21,25 @@ const TooltipContent = React.memo(
       );
     }
 
-    const {
-      totalElectricalCapacity
-    } = data;
-
     return (
       <div className="data-center-wrap">
-        {totalElectricalCapacity >= 0 && (
-          <div className="data-center-wrap__row">
-            <div className="data-center-wrap__headline">
-              Total Electrical Capacity
+        {Object.keys(data).map((entry, index) => {
+          if (!data[entry].showInTooltip) return null;
+
+          return (
+            <div
+              key={index}
+              className="data-center-wrap__row"
+            >
+              <div className="data-center-wrap__headline">
+                {data[entry].label}
+              </div>
+              <div className="data-center-wrap__description">
+                {data[entry].value}
+              </div>
             </div>
-            <div className="data-center-wrap__description">
-              {totalElectricalCapacity}
-            </div>
-          </div>
-        )}
+            )
+        })}
       </div>
     );
   }
@@ -50,9 +53,9 @@ const DataCenterTooltip = ({ dataCenterData, onClose, position }) => {
       position={position}
       onClose={onClose}
     >
-      <div>
-        {dataCenterData.alias}
-      </div>
+      <h4>
+        {dataCenterData.alias.value}
+      </h4>
       <TooltipContent data={dataCenterData} />
     </Tooltip>
   );

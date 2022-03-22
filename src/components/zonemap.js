@@ -107,7 +107,7 @@ const ZoneMap = ({
       const features = Array.isArray(dataCenters) && map(dataCenters, dataCenter => ({
         type: 'Feature',
         geometry: {
-          coordinates: [dataCenter.geo_lat, dataCenter.geo_lon],
+          coordinates: [dataCenter.geo_lat.value, dataCenter.geo_lon.value],
           type: 'Point'
         },
         properties: {

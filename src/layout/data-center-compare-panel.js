@@ -88,21 +88,18 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
                     </div>
                     {Boolean(dataCenter.alias) && (
                       <div className="data-center-compare-panel__row">
-                        <div className="data-center-compare-panel__headline">
-                          Name
-                        </div>
-                        <div className="data-center-compare-panel__subtext">
-                          {dataCenter.alias}
-                        </div>
+                        <h3 className="data-center-compare-panel__subtext">
+                          {dataCenter.alias.value}
+                        </h3>
                       </div>
                     )}
-                    {dataCenter.totalElectricalCapacity >= 0 && (
+                    {dataCenter.total_electrical_capacity.value >= 0 && (
                       <div className="data-center-compare-panel__row">
                         <div className="data-center-compare-panel__headline">
                           Total Electrical Capacity
                         </div>
                         <div className="data-center-compare-panel__subtext">
-                          {dataCenter.totalElectricalCapacity}
+                          {dataCenter.total_electrical_capacity.value}
                         </div>
                       </div>
                     )}
