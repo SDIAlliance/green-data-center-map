@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 
 import { dispatchApplication } from '../store';
@@ -10,11 +10,31 @@ const mapStateToProps = state => ({
 });
 
 const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
-  const dataCenters = useSelector(state => state.application.allDataCentersToCompare);
+  const dataCentersToCompare = useSelector(state => state.application.allDataCentersToCompare);
+  const [dataCenters, setDataCenters] = useState(null);
 
   usePageViewsTracker();
 
   const collapsedClass = isDataCenterComparePanelCollapsed ? 'data-center-compare-panel__collapsed' : '';
+
+  const handleRemoveDataCenterClick = (index) => {
+    if (Array.isArray(dataCentersToCompare)) {
+      const copyOfDataCentersToCompare = dataCentersToCompare.slice();
+
+      copyOfDataCentersToCompare.splice(index, 1);
+      setDataCenters(copyOfDataCentersToCompare);
+    }
+  }
+
+  useEffect(() => {
+    if (dataCenters) {
+      dispatchApplication('allDataCentersToCompare', dataCenters);
+
+      if (!dataCenters.length) {
+        dispatchApplication('isDataCenterComparePanelCollapsed', true);
+      }
+    }
+   }, [dataCenters])
 
   return (
     <div className={`data-center-compare-panel ${collapsedClass}`}>
@@ -29,17 +49,17 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
         </i>
       </div>
 
-      {Array.isArray(dataCenters) && Boolean(dataCenters.length) && (
+      {Array.isArray(dataCentersToCompare) && Boolean(dataCentersToCompare.length > 0) && (
         <>
           <div className="data-center-compare-panel__content">
-            {dataCenters.map(dataCenter => (
+            {dataCentersToCompare.map((dataCenter, index) => (
               <div
                 key={dataCenter.id}
                 className="data-center-compare-panel__data-center-box"
               >
                 <div
                   className="data-center-compare-panel__remove-data-center"
-                  onClick={() => dispatchApplication('allDataCentersToCompare', dataCenters.splice(dataCenter.id, 1))}
+                  onClick={() => handleRemoveDataCenterClick(index)}
                   role="button"
                   tabIndex="0"
                 >
@@ -73,7 +93,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
 
           <button
             className="data-center-compare-panel__button"
-            disabled={dataCenters.length < 2}
+            disabled={dataCentersToCompare.length < 2}
           >
             Compare
           </button>

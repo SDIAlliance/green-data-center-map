@@ -27,6 +27,7 @@ const debouncedReleaseMoving = debounce(() => { dispatchApplication('isMovingMap
 
 export default () => {
   const dataCenters = useSelector(state => state.data.dataCenters);
+  const currentDataCentersToCompare = useSelector(state => state.application.allDataCentersToCompare);
   const webGLSupported = useSelector(state => state.application.webGLSupported);
   const isHoveringExchange = useSelector(state => state.application.isHoveringExchange);
   const electricityMixMode = useSelector(state => state.application.electricityMixMode);
@@ -128,7 +129,7 @@ export default () => {
 
       const dataCenterAlreadyExists = Boolean(dataCentersToCompare.find(entry => entry.dataCenterId === data.dataCenterId));
       if (!dataCenterAlreadyExists) {
-        setDataCentersToCompare(prevState => ([...prevState, data]));
+        setDataCentersToCompare(prevState => [...prevState, data]);
       }
     },
     [dataCentersToCompare],
@@ -223,6 +224,12 @@ export default () => {
       dispatchApplication('allDataCentersToCompare', dataCentersToCompare);
     }
   }, [dataCentersToCompare])
+
+  useEffect(() => {
+    if (currentDataCentersToCompare) {
+      setDataCentersToCompare(currentDataCentersToCompare);
+    }
+  }, [currentDataCentersToCompare])
 
   return (
     <React.Fragment>

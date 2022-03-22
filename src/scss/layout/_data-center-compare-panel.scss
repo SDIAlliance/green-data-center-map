@@ -75,6 +75,11 @@
     background-color: #fff;
     border-radius: 0.3rem;
     box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+
+    // .data-center-compare-panel__data-center-box:not(:first-of-type)
+    &:not(:first-of-type) {
+      margin-top: 1rem;
+    }
   }
 
   // .data-center-compare-panel__headline
