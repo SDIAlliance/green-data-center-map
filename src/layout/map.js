@@ -127,12 +127,15 @@ export default () => {
         dispatchApplication('isDataCenterComparePanelCollapsed', false);
       }
 
-      const dataCenterAlreadyExists = Boolean(dataCentersToCompare.find(entry => entry.dataCenterId === data.dataCenterId));
-      if (!dataCenterAlreadyExists) {
-        setDataCentersToCompare(prevState => [...prevState, data]);
-      }
+      // NOTE: This is commented so that we can add the same Data Center for comparison, as we only get one from the API response
+      // const dataCenterAlreadyExists = Boolean(dataCentersToCompare.find(entry => entry.dataCenterId === data.dataCenterId));
+      // if (!dataCenterAlreadyExists) {
+      //   setDataCentersToCompare(prevState => [...prevState, data]);
+      // }
+
+      setDataCentersToCompare(prevState => [...prevState, data]);
     },
-    [dataCentersToCompare],
+    [],
   );
 
   const handleDataCenterMouseEnter = useMemo(
