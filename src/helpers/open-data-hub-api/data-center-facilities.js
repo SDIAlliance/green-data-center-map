@@ -19,7 +19,7 @@ export function getEndpoint() {
   return isUsingLocalEndpoint() ? 'https://stoplight.io/mocks/sdia/odh-api-spec/33382459' : '';
 }
 
-export function fetchDataCentersApiRequest(path) {
+export function fetchDataCenterFacilitiesApiRequest(path) {
   const url = getEndpoint() + path;
 
   return new Promise((resolve, reject) => {

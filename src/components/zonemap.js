@@ -15,12 +15,12 @@ import {
 } from 'lodash';
 import { __ } from '../helpers/translation';
 
-const interactiveLayerIds = ['zones-clickable', 'data-center'];
+const interactiveLayerIds = ['zones-clickable', 'data-center-facility'];
 const mapStyle = { version: 8, sources: {}, layers: [] };
 
 const ZoneMap = ({
   children = null,
-  dataCenters = null,
+  dataCenterFacilities = null,
   hoveringEnabled = true,
   onMapLoaded = noop,
   onMapError = noop,
@@ -28,9 +28,9 @@ const ZoneMap = ({
   onResize = noop,
   onSeaClick = noop,
   onViewportChange = noop,
-  onDataCenterClick = noop,
-  onDataCenterMouseEnter = noop,
-  onDataCenterMouseLeave = noop,
+  onDataCenterFacilityClick = noop,
+  onDataCenterFacilityMouseEnter = noop,
+  onDataCenterFacilityMouseLeave = noop,
   onZoneClick = noop,
   onZoneMouseEnter = noop,
   onZoneMouseLeave = noop,
@@ -47,7 +47,7 @@ const ZoneMap = ({
 }) => {
   const ref = useRef(null);
   const wrapperRef = useRef(null);
-  const [hoveredDataCenterId, setHoveredDataCenterId] = useState(null);
+  const [hoveredDataCenterFacilityId, setHoveredDataCenterFacilityId] = useState(null);
   const [hoveredZoneId, setHoveredZoneId] = useState(null);
   const [isSupported, setIsSupported] = useState(true);
 
@@ -102,29 +102,29 @@ const ZoneMap = ({
   );
 
   // Generate sources based on the data centers data.
-  const dataCentersSources = useMemo(
+  const dataCenterFacilitiesSources = useMemo(
     () => {
-      const features = Array.isArray(dataCenters) && map(dataCenters, dataCenter => ({
+      const features = Array.isArray(dataCenterFacilities) && map(dataCenterFacilities, dataCenterFacility => ({
         type: 'Feature',
         geometry: {
-          coordinates: [dataCenter.geo_lat, dataCenter.geo_lon],
+          coordinates: [dataCenterFacility.geo_lat, dataCenterFacility.geo_lon],
           type: 'Point'
         },
         properties: {
           isClickable: true,
-          dataCenterData: dataCenter,
-          dataCenterId: dataCenter.id,
+          dataCenterFacilityData: dataCenterFacility,
+          dataCenterFacilityId: dataCenterFacility.id,
         },
       }));
 
       return {
-        dataCenters: {
+        dataCenterFacilities: {
           type: 'FeatureCollection',
           features
         }
       };
     },
-    [dataCenters],
+    [dataCenterFacilities],
   );
 
   // Every time the hovered zone changes, update the hover map layer accordingly.
@@ -134,7 +134,7 @@ const ZoneMap = ({
   // to keep the stable and prevent excessive rerendering.
   const styles = useMemo(
     () => ({
-      dataCenters: { 'circle-color': 'orange', 'circle-radius': 10 },
+      dataCenterFacilities: { 'circle-color': 'orange', 'circle-radius': 10 },
       hover: { 'fill-color': 'white', 'fill-opacity': 0.3 },
       ocean: { 'background-color': theme.oceanColor },
       zonesBorder: { 'line-color': theme.strokeColor, 'line-width': theme.strokeWidth },
@@ -162,10 +162,10 @@ const ZoneMap = ({
         const featuresProperties = Array.isArray(features) && Boolean(features[0]) && Boolean(features[0].properties);
 
         if (featuresProperties) {
-          const { dataCenterId, zoneId } = features[0].properties;
+          const { dataCenterFacilityId, zoneId } = features[0].properties;
 
-          if (dataCenterId) {
-            onDataCenterClick(dataCenters.find(dataCenter => dataCenter.id === features[0].properties.dataCenterId));
+          if (dataCenterFacilityId) {
+            onDataCenterFacilityClick(dataCenterFacilities.find(dataCenterFacility => dataCenterFacility.id === features[0].properties.dataCenterFacilityId));
           } else if (zoneId) {
             onZoneClick(features[0].properties.zoneId);
           }
@@ -176,7 +176,7 @@ const ZoneMap = ({
         }
       }
     },
-    [ref, dataCenters, onSeaClick, onZoneClick, onDataCenterClick],
+    [ref, dataCenterFacilities, onSeaClick, onZoneClick, onDataCenterFacilityClick],
   );
 
   const handleMouseMove = useMemo(
@@ -197,34 +197,34 @@ const ZoneMap = ({
           // zone and onZoneMouseLeave when it leaves all zones.
           if (!isEmpty(features) && hoveringEnabled) {
             if (Array.isArray(features) && Boolean(features[0].properties)) {
-              const { dataCenterId, zoneId } = features[0].properties;
+              const { dataCenterFacilityId, zoneId } = features[0].properties;
 
               if (zoneId) {
                 if (hoveredZoneId !== zoneId) {
-                  onDataCenterMouseLeave();
-                  setHoveredDataCenterId(null);
+                  onDataCenterFacilityMouseLeave();
+                  setHoveredDataCenterFacilityId(null);
                   onZoneMouseEnter(zones[zoneId], zoneId);
                   setHoveredZoneId(zoneId);
                 }
-              } else if (dataCenterId) {
-                if (hoveredDataCenterId !== dataCenterId) {
+              } else if (dataCenterFacilityId) {
+                if (hoveredDataCenterFacilityId !== dataCenterFacilityId) {
                   onZoneMouseLeave();
                   setHoveredZoneId(null);
-                  onDataCenterMouseEnter(dataCenters.find(dataCenter => dataCenter.id === dataCenterId));
-                  setHoveredDataCenterId(dataCenterId);
+                  onDataCenterFacilityMouseEnter(dataCenterFacilities.find(dataCenterFacility => dataCenterFacility.id === dataCenterFacilityId));
+                  setHoveredDataCenterFacilityId(dataCenterFacilityId);
                 }
               }
             }
-          } else if (hoveredZoneId !== null || hoveredDataCenterId !== null) {
-            onDataCenterMouseLeave();
+          } else if (hoveredZoneId !== null || hoveredDataCenterFacilityId !== null) {
+            onDataCenterFacilityMouseLeave();
             onZoneMouseLeave();
             setHoveredZoneId(null);
-            setHoveredDataCenterId(null);
+            setHoveredDataCenterFacilityId(null);
           }
         }
       }
     },
-    [ref, hoveringEnabled, isDragging, zones, hoveredZoneId, onMouseMove, onZoneMouseEnter, onZoneMouseLeave, dataCenters, hoveredDataCenterId, onDataCenterMouseEnter, onDataCenterMouseLeave],
+    [ref, hoveringEnabled, isDragging, zones, hoveredZoneId, onMouseMove, onZoneMouseEnter, onZoneMouseLeave, dataCenterFacilities, hoveredDataCenterFacilityId, onDataCenterFacilityMouseEnter, onDataCenterFacilityMouseLeave],
   );
 
   const handleMouseOut = useMemo(
@@ -234,13 +234,13 @@ const ZoneMap = ({
         setHoveredZoneId(null);
       }
 
-      if (hoveredDataCenterId !== null) {
-        onDataCenterMouseLeave();
-        setHoveredDataCenterId(null);
+      if (hoveredDataCenterFacilityId !== null) {
+        onDataCenterFacilityMouseLeave();
+        setHoveredDataCenterFacilityId(null);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hoveredZoneId, hoveredDataCenterId],
+    [hoveredZoneId, hoveredDataCenterFacilityId],
   );
 
   // Don't render map nor any of the layers if WebGL is not supported.
@@ -313,10 +313,10 @@ const ZoneMap = ({
           <Layer id="hover" type="fill" paint={styles.hover} filter={hoverFilter} />
         </Source>
         <Source
-          data={dataCentersSources.dataCenters}
+          data={dataCenterFacilitiesSources.dataCenterFacilities}
           type="geojson"
         >
-          <Layer id="data-center" type="circle" paint={styles.dataCenters} />
+          <Layer id="data-center-facility" type="circle" paint={styles.dataCenterFacilities} />
         </Source>
         {/* Extra layers provided by user */}
         {children}

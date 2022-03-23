@@ -47,7 +47,7 @@
 }
 
 #country-tooltip,
-#data-center-tooltip {
+#data-center-facilities-tooltip {
     .zone-name-header{
         margin-bottom: 5px;
     }
@@ -60,7 +60,7 @@
     }
 
     &.country-tooltip-visible,
-    &.data-center-tooltip-visible {
+    &.data-center-facilities-tooltip-visible {
         @include respond-to('small') {
             display: none;
         }

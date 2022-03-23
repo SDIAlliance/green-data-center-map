@@ -18,14 +18,14 @@ const LEFT_PANEL_TAB_ELECTRICITY_MAP = 'electricity-map';
 
 const initialApplicationState = {
   // Here we will store non-data specific state (to be sent in analytics and crash reporting)
-  allDataCentersToCompare: null,
+  allDataCenterFacilitiesToCompare: null,
   bundleHash: window.bundleHash,
   callerLocation: null,
   callerZone: null,
   clientType: window.isCordova ? 'mobileapp' : 'web',
   co2ColorbarValue: null,
   colorBlindModeEnabled: cookieGetBool('colorBlindModeEnabled', false),
-  dataCenterInfo: null,
+  dataCenterFacilityInfo: null,
   brightModeEnabled: cookieGetBool('brightModeEnabled', true),
   electricityMixMode: 'consumption',
   isCordova: window.isCordova,
@@ -34,8 +34,8 @@ const initialApplicationState = {
   // be stopped from propagating mouse move events to the map.
   // See https://github.com/visgl/react-map-gl/blob/master/docs/advanced/custom-components.md
   isHoveringExchange: false,
-  isDataCenterComparePanelCollapsed: true,
-  isDataCenterComparePanelComparisonOpen: false,
+  isDataCenterFacilitiesComparePanelCollapsed: true,
+  isDataCenterFacilityComparePanelComparisonOpen: false,
   isMovingMap: false,
   isLoadingMap: true,
   isMobile:

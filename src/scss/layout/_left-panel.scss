@@ -73,7 +73,7 @@
     box-sizing: border-box;
     transition: transform 0.4s, box-shadow 0.4s;
 
-    &:not(.collapsed) ~ .data-center-compare-panel.collapsed {
+    &:not(.collapsed) ~ .data-center-facilities-compare-panel.collapsed {
         display: none;
     }
 

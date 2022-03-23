@@ -1,8 +1,8 @@
-.data-center-wrap {
+.data-center-facility-wrap {
   max-width: 450px;
   word-break: break-all;
 
-  // .data-center-wrap .data-center-wrap__headline
+  // .data-center-facility-wrap .data-center-facility-wrap__headline
   &__headline {
     font-size: 0.85em;
     font-weight: 700;
@@ -10,18 +10,18 @@
     margin-bottom: auto;
   }
 
-  // .data-center-wrap .data-center-wrap__row:not(:last-of-type)
+  // .data-center-facility-wrap .data-center-facility-wrap__row:not(:last-of-type)
   &__row:not(:last-of-type) {
     margin-bottom: 1rem;
   }
 
-  // .data-center-wrap .data-center-wrap__subtext
+  // .data-center-facility-wrap .data-center-facility-wrap__subtext
   &__subtext {
     font-size: 0.85em;
     margin-top: 0.375rem;
   }
 
-  // .data-center-wrap .data-center-wrap__title
+  // .data-center-facility-wrap .data-center-facility-wrap__title
   &__title {
     font-size: 1em;
     margin-top: 0;

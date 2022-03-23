@@ -15,7 +15,7 @@ import { useZonesWithColors } from '../hooks/map';
 import { useTrackEvent } from '../hooks/tracking';
 import { dispatchApplication } from '../store';
 
-import DataCenterTooltip from '../components/tooltips/data-center-tooltip';
+import DataCenterFacilityTooltip from '../components/tooltips/data-center-facility-tooltip';
 import ZoneMap from '../components/zonemap';
 import MapLayer from '../components/maplayer';
 import MapCountryTooltip from '../components/tooltips/mapcountrytooltip';
@@ -28,8 +28,8 @@ import { LEFT_PANEL_TAB_DATA_CENTER_FACILITIES, LEFT_PANEL_TAB_ELECTRICITY_MAP }
 const debouncedReleaseMoving = debounce(() => { dispatchApplication('isMovingMap', false); }, 200);
 
 export default () => {
-  const dataCenters = useSelector(state => state.data.dataCenters);
-  const currentDataCentersToCompare = useSelector(state => state.application.allDataCentersToCompare);
+  const dataCenterFacilities = useSelector(state => state.data.dataCenterFacilities);
+  const currentDataCenterFacilitiesToCompare = useSelector(state => state.application.allDataCenterFacilitiesToCompare);
   const webGLSupported = useSelector(state => state.application.webGLSupported);
   const isHoveringExchange = useSelector(state => state.application.isHoveringExchange);
   const electricityMixMode = useSelector(state => state.application.electricityMixMode);
@@ -49,10 +49,10 @@ export default () => {
   const zoneId = getZoneId();
   const theme = useTheme();
 
-  const [dataCentersToCompare, setDataCentersToCompare] = useState([]);
+  const [dataCenterFacilitiesToCompare, setDataCenterFacilitiesToCompare] = useState([]);
   const [tooltipPosition, setTooltipPosition] = useState(null);
   const [tooltipZoneData, setTooltipZoneData] = useState(null);
-  const [tooltipDataCenterData, setTooltipDataCenterData] = useState(null);
+  const [tooltipDataCenterFacilityData, setTooltipDataCenterFacilityData] = useState(null);
 
   const handleMapLoaded = useMemo(
     () => () => {
@@ -122,39 +122,39 @@ export default () => {
     [history, location],
   );
 
-  const handleDataCenterClick = useMemo(
+  const handleDataFacilityCenterClick = useMemo(
     () => (data) => {
       if (data) {
-        dispatchApplication('isDataCenterComparePanelComparisonOpen', false);
+        dispatchApplication('isDataCenterFacilitiesComparePanelComparisonOpen', false);
         dispatchApplication('leftPanelCurrentTab', LEFT_PANEL_TAB_DATA_CENTER_FACILITIES);
       }
 
       // NOTE: This is commented so that we can add the same Data Center for comparison, as we only get one from the API response
-      // const dataCenterAlreadyExists = Boolean(dataCentersToCompare.find(entry => entry.dataCenterId === data.dataCenterId));
-      // if (!dataCenterAlreadyExists) {
-      //   setDataCentersToCompare(prevState => [...prevState, data]);
+      // const dataCenterFacilityAlreadyExists = Boolean(dataCenterFacilitiesToCompare.find(entry => entry.dataCenterFacilityId === data.dataCenterFacilityId));
+      // if (!dataCenterFacilityAlreadyExists) {
+      //   setDataCenterFacilitiesToCompare(prevState => [...prevState, data]);
       // }
 
-      setDataCentersToCompare(prevState => [...prevState, data]);
+      setDataCenterFacilitiesToCompare(prevState => [...prevState, data]);
     },
     [],
   );
 
-  const handleDataCenterMouseEnter = useMemo(
+  const handleDataCenterFacilityMouseEnter = useMemo(
     () => (data) => {
       dispatchApplication(
-        'dataCenterInfo',
+        'dataCenterFacilityInfo',
          data
       );
-      setTooltipDataCenterData(data);
+      setTooltipDataCenterFacilityData(data);
     },
     [],
   );
 
-  const handleDataCenterMouseLeave = useMemo(
+  const handleDataCenterFacilityMouseLeave = useMemo(
     () => () => {
-      dispatchApplication('dataCenterInfo', null);
-      setTooltipDataCenterData(null);
+      dispatchApplication('dataCenterFacilityInfo', null);
+      setTooltipDataCenterFacilityData(null);
     },
     [],
   );
@@ -162,7 +162,7 @@ export default () => {
   const handleZoneClick = useMemo(
     () => (id) => {
       trackEvent('countryClick');
-      dispatchApplication('isDataCenterComparePanelCollapsed', true);
+      dispatchApplication('isDataCenterFacilitiesComparePanelCollapsed', true);
       dispatchApplication('leftPanelCurrentTab', LEFT_PANEL_TAB_ELECTRICITY_MAP);
 
       history.push({ pathname: `/zone/${id}`, search: location.search });
@@ -226,16 +226,16 @@ export default () => {
   const hoveringEnabled = !isHoveringExchange && !isMobile;
 
   useEffect(() => {
-    if (dataCentersToCompare) {
-      dispatchApplication('allDataCentersToCompare', dataCentersToCompare);
+    if (dataCenterFacilitiesToCompare) {
+      dispatchApplication('allDataCenterFacilitiesToCompare', dataCenterFacilitiesToCompare);
     }
-  }, [dataCentersToCompare])
+  }, [dataCenterFacilitiesToCompare])
 
   useEffect(() => {
-    if (currentDataCentersToCompare) {
-      setDataCentersToCompare(currentDataCentersToCompare);
+    if (currentDataCenterFacilitiesToCompare) {
+      setDataCenterFacilitiesToCompare(currentDataCenterFacilitiesToCompare);
     }
-  }, [currentDataCentersToCompare])
+  }, [currentDataCenterFacilitiesToCompare])
 
   return (
     <React.Fragment>
@@ -251,15 +251,15 @@ export default () => {
           onClose={() => setTooltipZoneData(null)}
         />
       )}
-      {tooltipPosition && tooltipDataCenterData && hoveringEnabled && (
-        <DataCenterTooltip
-          dataCenterData={tooltipDataCenterData}
+      {tooltipPosition && tooltipDataCenterFacilityData && hoveringEnabled && (
+        <DataCenterFacilityTooltip
+          dataCenterFacilityData={tooltipDataCenterFacilityData}
           position={tooltipPosition}
-          onClose={() => setTooltipDataCenterData(null)}
+          onClose={() => setTooltipDataCenterFacilityData(null)}
         />
       )}
       <ZoneMap
-        dataCenters={dataCenters}
+        dataCenterFacilities={dataCenterFacilities}
         hoveringEnabled={hoveringEnabled}
         onMapLoaded={handleMapLoaded}
         onMapError={handleMapError}
@@ -267,9 +267,9 @@ export default () => {
         onResize={handleResize}
         onSeaClick={handleSeaClick}
         onViewportChange={handleViewportChange}
-        onDataCenterClick={handleDataCenterClick}
-        onDataCenterMouseEnter={handleDataCenterMouseEnter}
-        onDataCenterMouseLeave={handleDataCenterMouseLeave}
+        onDataCenterFacilityClick={handleDataFacilityCenterClick}
+        onDataCenterFacilityMouseEnter={handleDataCenterFacilityMouseEnter}
+        onDataCenterFacilityMouseLeave={handleDataCenterFacilityMouseLeave}
         onZoneClick={handleZoneClick}
         onZoneMouseEnter={handleZoneMouseEnter}
         onZoneMouseLeave={handleZoneMouseLeave}

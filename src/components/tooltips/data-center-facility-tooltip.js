@@ -41,12 +41,12 @@ const TooltipContent = React.memo(
         {tooltipData.map((entry, index) => (
             <div
               key={index}
-              className="data-center-wrap__row"
+              className="data-center-facility-wrap__row"
             >
-              <div className="data-center-wrap__headline">
+              <div className="data-center-facility-wrap__headline">
                 {entry.label}
               </div>
-              <div className="data-center-wrap__description">
+              <div className="data-center-facility-wrap__description">
                 {entry.value}
               </div>
             </div>
@@ -56,22 +56,22 @@ const TooltipContent = React.memo(
   }
 );
 
-const DataCenterTooltip = ({ dataCenterData, onClose, position }) => {
-  if (!dataCenterData) return null;
+const DataCenterFacilityTooltip = ({ dataCenterFacilityData, onClose, position }) => {
+  if (!dataCenterFacilityData) return null;
 
   return (
     <Tooltip
       position={position}
       onClose={onClose}
     >
-      <div className="data-center-wrap">
-        <h3 className="data-center-wrap__title">
-          {dataCenterData.alias}
+      <div className="data-center-facility-wrap">
+        <h3 className="data-center-facility-wrap__title">
+          {dataCenterFacilityData.alias}
         </h3>
-        <TooltipContent data={dataCenterData} />
+        <TooltipContent data={dataCenterFacilityData} />
       </div>
     </Tooltip>
   );
 };
 
-export default DataCenterTooltip;
+export default DataCenterFacilityTooltip;

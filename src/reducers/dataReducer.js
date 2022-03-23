@@ -41,12 +41,12 @@ Object.entries(exchanges).forEach((entry) => {
 
 const initialDataState = {
   // Here we will store data items
-  dataCenters: [],
+  dataCenterFacilities: [],
   grid: { zones, exchanges },
   hasConnectionWarning: false,
   hasInitializedGrid: false,
   histories: {},
-  isLoadingDataCenters: false,
+  isLoadingDataCenterFacilities: false,
   isLoadingHistories: false,
   isLoadingGrid: false,
   isLoadingSolar: false,
@@ -60,30 +60,30 @@ const initialDataState = {
 module.exports = (state = initialDataState, action) => {
   switch (action.type) {
     case 'DATA_CENTERS_FETCH_REQUESTED': {
-      return { ...state, isLoadingDataCenters: true };
+      return { ...state, isLoadingDataCenterFacilities: true };
     }
 
     case 'DATA_CENTERS_FETCH_SUCCEEDED': {
       return {
         ...state,
-        isLoadingDataCenters: false,
-        dataCenters: Boolean(action) && Array.isArray(action.payload) ?
-          action.payload.map(dataCenter => (
-            Boolean(dataCenter) && {
-              ...dataCenter,
-              consentToOpenData: dataCenter.consent_to_open_data,
-              createdAt: dataCenter.created_at,
-              energyInputRestEndpoint: dataCenter.energy_input_rest_endpoint,
-              energyInputStreamEndpoint: dataCenter.energy_input_stream_endpoint,
-              energyInputStreamTopic: dataCenter.energy_input_stream_topic,
-              energyOutputRestEndpoint: dataCenter.energy_output_rest_endpoint,
-              energyOutputStreamEndpoint: dataCenter.energy_output_stream_endpoint,
-              energyOutputStreamTopic: dataCenter.energy_output_stream_topic,
-              equipmentInventoryRestEndpoint: dataCenter.equipment_inventory_rest_endpoint,
-              lat: dataCenter.geo_lat,
-              lng: dataCenter.geo_lon,
-              totalElectricalCapacity: dataCenter.total_electrical_capacity,
-              updatedAt: dataCenter.updated_at
+        isLoadingDataCenterFacilities: false,
+        dataCenterFacilities: Boolean(action) && Array.isArray(action.payload) ?
+          action.payload.map(dataCenterFacility => (
+            Boolean(dataCenterFacility) && {
+              ...dataCenterFacility,
+              consentToOpenData: dataCenterFacility.consent_to_open_data,
+              createdAt: dataCenterFacility.created_at,
+              energyInputRestEndpoint: dataCenterFacility.energy_input_rest_endpoint,
+              energyInputStreamEndpoint: dataCenterFacility.energy_input_stream_endpoint,
+              energyInputStreamTopic: dataCenterFacility.energy_input_stream_topic,
+              energyOutputRestEndpoint: dataCenterFacility.energy_output_rest_endpoint,
+              energyOutputStreamEndpoint: dataCenterFacility.energy_output_stream_endpoint,
+              energyOutputStreamTopic: dataCenterFacility.energy_output_stream_topic,
+              equipmentInventoryRestEndpoint: dataCenterFacility.equipment_inventory_rest_endpoint,
+              lat: dataCenterFacility.geo_lat,
+              lng: dataCenterFacility.geo_lon,
+              totalElectricalCapacity: dataCenterFacility.total_electrical_capacity,
+              updatedAt: dataCenterFacility.updated_at
             }
           )) :
           null,
@@ -91,7 +91,7 @@ module.exports = (state = initialDataState, action) => {
     }
 
     case 'DATA_CENTERS_FETCH_FAILED': {
-      return { ...state, isLoadingDataCenters: false };
+      return { ...state, isLoadingDataCenterFacilities: false };
     }
 
     case 'GRID_DATA_FETCH_REQUESTED': {

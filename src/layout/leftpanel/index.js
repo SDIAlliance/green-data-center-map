@@ -16,7 +16,7 @@ import {
 import { dispatchApplication } from '../../store';
 import { useSearchParams } from '../../hooks/router';
 import { usePageViewsTracker } from '../../hooks/tracking';
-import DataCenterComparePanel from '../data-center-compare-panel';
+import DataCenterFacilitiesComparePanel from '../data-center-facilities-compare-panel';
 
 import FAQPanel from './faqpanel';
 import MobileInfoTab from './mobileinfotab';
@@ -49,7 +49,7 @@ const HandleLegacyRoutes = () => {
 // TODO: Move all styles from styles.css to here
 
 const mapStateToProps = state => ({
-  isDataCenterComparePanelComparisonOpen: state.application.isDataCenterComparePanelComparisonOpen,
+  isDataCenterFacilitiesComparePanelComparisonOpen: state.application.isDataCenterFacilitiesComparePanelComparisonOpen,
   leftPanelCurrentTab: state.application.leftPanelCurrentTab,
 });
 
@@ -76,9 +76,9 @@ const Container = styled.div`
   }
 `;
 
-const LeftPanel = ({ isDataCenterComparePanelComparisonOpen, leftPanelCurrentTab }) => {
+const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, leftPanelCurrentTab }) => {
   const defaultTabToggle = useRef(null);
-  const dataCenterFacilityComparisonTabToggle = useRef(null);
+  const dataCenterFacilitiesComparisonTabToggle = useRef(null);
   const location = useLocation();
 
   const collapsedClass = 'collapsed';
@@ -89,7 +89,7 @@ const LeftPanel = ({ isDataCenterComparePanelComparisonOpen, leftPanelCurrentTab
     dispatchApplication('leftPanelCurrentTab', leftPanelCurrentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP ? null : LEFT_PANEL_TAB_ELECTRICITY_MAP);
   }
 
-  const handleDataCenterTogglePanelButtonClick = () => {
+  const handleDataCenterFacilitiesTogglePanelButtonClick = () => {
     dispatchApplication('leftPanelCurrentTab', leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ? null : LEFT_PANEL_TAB_DATA_CENTER_FACILITIES);
   }
 
@@ -98,25 +98,25 @@ const LeftPanel = ({ isDataCenterComparePanelComparisonOpen, leftPanelCurrentTab
       defaultTabToggle.current.classList.remove('inactive');
       defaultTabToggle.current.classList.remove(collapsedClass);
 
-      dataCenterFacilityComparisonTabToggle.current.classList.add('inactive');
-      dataCenterFacilityComparisonTabToggle.current.classList.remove(collapsedClass);
+      dataCenterFacilitiesComparisonTabToggle.current.classList.add('inactive');
+      dataCenterFacilitiesComparisonTabToggle.current.classList.remove(collapsedClass);
     }
     else if (leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES) {
       defaultTabToggle.current.classList.add('inactive');
       defaultTabToggle.current.classList.remove(collapsedClass);
 
-      dataCenterFacilityComparisonTabToggle.current.classList.remove('inactive');
-      dataCenterFacilityComparisonTabToggle.current.classList.remove(collapsedClass);
+      dataCenterFacilitiesComparisonTabToggle.current.classList.remove('inactive');
+      dataCenterFacilitiesComparisonTabToggle.current.classList.remove(collapsedClass);
     } else {
       defaultTabToggle.current.classList.add(collapsedClass);
       defaultTabToggle.current.classList.remove('inactive');
 
-      dataCenterFacilityComparisonTabToggle.current.classList.add(collapsedClass);
-      dataCenterFacilityComparisonTabToggle.current.classList.remove('inactive');
+      dataCenterFacilitiesComparisonTabToggle.current.classList.add(collapsedClass);
+      dataCenterFacilitiesComparisonTabToggle.current.classList.remove('inactive');
     }
   }, [leftPanelCurrentTab])
 
-  const expandPanel = isDataCenterComparePanelComparisonOpen && leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES;
+  const expandPanel = isDataCenterFacilitiesComparePanelComparisonOpen && leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES;
 
   return (
     <Container
@@ -149,12 +149,12 @@ const LeftPanel = ({ isDataCenterComparePanelComparisonOpen, leftPanelCurrentTab
       </LeftPanelCollapseButton>
 
       <LeftPanelCollapseButton
-        ref={dataCenterFacilityComparisonTabToggle}
+        ref={dataCenterFacilitiesComparisonTabToggle}
         id="left-panel-collapse-button"
         className={`data-center-facilities ${collapsedClass}`}
         role="button"
         tabIndex="0"
-        onClick={handleDataCenterTogglePanelButtonClick}
+        onClick={handleDataCenterFacilitiesTogglePanelButtonClick}
       >
         <i className="material-icons">
           arrow_drop_down
@@ -163,7 +163,7 @@ const LeftPanel = ({ isDataCenterComparePanelComparisonOpen, leftPanelCurrentTab
 
       {leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ?
         (
-          <DataCenterComparePanel />
+          <DataCenterFacilitiesComparePanel />
         ) :
         (
           <>
