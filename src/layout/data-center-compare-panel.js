@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import { dispatchApplication } from '../store';
 import { usePageViewsTracker } from '../hooks/tracking';
@@ -9,6 +10,12 @@ const mapStateToProps = state => ({
   isDataCenterComparePanelCollapsed: state.application.isDataCenterComparePanelCollapsed,
   isDataCenterComparePanelComparisonOpen: state.application.isDataCenterComparePanelComparisonOpen
 });
+
+const MobileHeader = styled.div`
+@media (min-width: 768px) {
+  display: none !important;
+}
+`;
 
 const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCenterComparePanelComparisonOpen }) => {
   const dataCentersToCompare = useSelector(state => state.application.allDataCentersToCompare);
@@ -48,6 +55,14 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
 
   return (
     <div className={`data-center-compare-panel${isDataCenterComparePanelComparisonOpen ? ' data-center-compare-panel--expanded' : ''} ${collapsedClass}`}>
+      <MobileHeader id="mobile-header" className="brightmode">
+        <div className="header-content">
+          <div className="logo">
+            <div className="image" id="electricitymap-logo" />
+          </div>
+        </div>
+      </MobileHeader>
+      
       <div
         className={`data-center-compare-panel__close ${collapsedClass}`}
         onClick={handleTogglePanelButtonClick}
