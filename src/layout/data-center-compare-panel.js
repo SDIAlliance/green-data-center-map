@@ -6,25 +6,24 @@ import { usePageViewsTracker } from '../hooks/tracking';
 
 
 const mapStateToProps = state => ({
-  isDataCenterComparePanelCollapsed: state.application.isDataCenterComparePanelCollapsed
+  isDataCenterComparePanelCollapsed: state.application.isDataCenterComparePanelCollapsed,
+  isDataCenterComparePanelComparisonOpen: state.application.isDataCenterComparePanelComparisonOpen
 });
 
-const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
+const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCenterComparePanelComparisonOpen }) => {
   const dataCentersToCompare = useSelector(state => state.application.allDataCentersToCompare);
   const [dataCenters, setDataCenters] = useState(null);
-  const [showComparison, setShowComparison] = useState(false);
 
   usePageViewsTracker();
 
-  const collapsedClass = isDataCenterComparePanelCollapsed ? 'data-center-compare-panel__collapsed' : '';
+  const collapsedClass = isDataCenterComparePanelCollapsed ? 'collapsed' : '';
 
   const handleCompareButtonClick = () => {
-    setShowComparison(prevState => !prevState);
+    dispatchApplication('isDataCenterComparePanelComparisonOpen', !isDataCenterComparePanelComparisonOpen);
   };
 
-  const handleCloseButtonClick = () => {
-    dispatchApplication('isDataCenterComparePanelCollapsed', true);
-    setShowComparison(false);
+  const handleTogglePanelButtonClick = () => {
+    dispatchApplication('isDataCenterComparePanelCollapsed', !isDataCenterComparePanelCollapsed);
   };
 
   const handleRemoveDataCenterClick = (index) => {
@@ -42,16 +41,27 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
 
       if (!dataCenters.length) {
         dispatchApplication('isDataCenterComparePanelCollapsed', true);
-        setShowComparison(false);
+        dispatchApplication('isDataCenterComparePanelComparisonOpen', true);
       }
     }
    }, [dataCenters])
 
   return (
-    <div className={`data-center-compare-panel${showComparison ? ' data-center-compare-panel--expanded' : ''} ${collapsedClass}`}>
+    <div className={`data-center-compare-panel${isDataCenterComparePanelComparisonOpen ? ' data-center-compare-panel--expanded' : ''} ${collapsedClass}`}>
       <div
         className={`data-center-compare-panel__close ${collapsedClass}`}
-        onClick={handleCloseButtonClick}
+        onClick={handleTogglePanelButtonClick}
+        role="button"
+        tabIndex="0"
+      >
+        <i className="material-icons">
+          arrow_drop_down
+        </i>
+      </div>
+
+      <div
+        className="data-center-compare-panel__close-mobile"
+        onClick={handleTogglePanelButtonClick}
         role="button"
         tabIndex="0"
       >
@@ -60,94 +70,100 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
         </i>
       </div>
 
-      {Array.isArray(dataCentersToCompare) && Boolean(dataCentersToCompare.length > 0) && (
+      {Array.isArray(dataCentersToCompare) && !dataCentersToCompare.length && (
+        <h3 className="data-center-compare-panel__empty-content-title">
+          No data centers selected.
+        </h3>
+      )}
+
+      {Array.isArray(dataCentersToCompare) && Boolean(dataCentersToCompare.length) && (
         <>
           <div className="data-center-compare-panel__content">
-            {showComparison ?
-            (
-              <div>
-                <h3 className="data-center-compare-panel__title">
-                  Data Center Comparison
-                </h3>
-                <table className="data-center-compare-panel__table">
-                  <tr className="data-center-compare-panel__table-row">
-                    <td>
-                      &nbsp;
-                    </td>
-                    {dataCentersToCompare.map((dataCenter, index) => (
-                      <th
-                        key={index}
-                        className="data-center-compare-panel__table-column"
-                      >
-                        {dataCenter.alias.value}
-                      </th>
-                    ))}
-                  </tr>
-                  <tr className="data-center-compare-panel__table-row">
-                    <td className="data-center-compare-panel__table-column">
-                      Total Electrical Capacity
-                    </td>
-                    {dataCentersToCompare.map((dataCenter, index) => (
-                      <td
-                        key={index}
-                        className="data-center-compare-panel__table-column"
-                      >
-                        {dataCenter.total_electrical_capacity.value}
+            {isDataCenterComparePanelComparisonOpen ?
+              (
+                <>
+                  <h3 className="data-center-compare-panel__title">
+                    Data Center Comparison
+                  </h3>
+                  <table className="data-center-compare-panel__table">
+                    <tr className="data-center-compare-panel__table-row">
+                      <td>
+                        &nbsp;
                       </td>
-                    ))}
-                  </tr>
-                </table>
-              </div>
-            ) :
-            (
-              <>
-                <h3 className="data-center-compare-panel__title">
-                  Selected Data Centers
-                </h3>
-                {dataCentersToCompare.map((dataCenter, index) => (
-                  <div
-                    key={dataCenter.id}
-                    className="data-center-compare-panel__data-center-box"
-                  >
-                    <div
-                      className="data-center-compare-panel__remove-data-center"
-                      onClick={() => handleRemoveDataCenterClick(index)}
-                      role="button"
-                      tabIndex="0"
-                    >
-                      <i className="material-icons">
-                        close
-                      </i>
-                    </div>
-                    {Boolean(dataCenter.alias) && (
-                      <div className="data-center-compare-panel__row">
-                        <h3 className="data-center-compare-panel__subtext">
+                      {dataCentersToCompare.map((dataCenter, index) => (
+                        <th
+                          key={index}
+                          className="data-center-compare-panel__table-column"
+                        >
                           {dataCenter.alias.value}
-                        </h3>
-                      </div>
-                    )}
-                    {dataCenter.total_electrical_capacity.value >= 0 && (
-                      <div className="data-center-compare-panel__row">
-                        <div className="data-center-compare-panel__headline">
-                          Total Electrical Capacity
-                        </div>
-                        <div className="data-center-compare-panel__subtext">
+                        </th>
+                      ))}
+                    </tr>
+                    <tr className="data-center-compare-panel__table-row">
+                      <td className="data-center-compare-panel__table-column">
+                        Total Electrical Capacity
+                      </td>
+                      {dataCentersToCompare.map((dataCenter, index) => (
+                        <td
+                          key={index}
+                          className="data-center-compare-panel__table-column"
+                        >
                           {dataCenter.total_electrical_capacity.value}
-                        </div>
+                        </td>
+                      ))}
+                    </tr>
+                  </table>
+                </>
+              ) :
+              (
+                <>
+                  <h3 className="data-center-compare-panel__title">
+                    Selected Data Centers
+                  </h3>
+                  {dataCentersToCompare.map((dataCenter, index) => (
+                    <div
+                      key={dataCenter.id}
+                      className="data-center-compare-panel__data-center-box"
+                    >
+                      <div
+                        className="data-center-compare-panel__remove-data-center"
+                        onClick={() => handleRemoveDataCenterClick(index)}
+                        role="button"
+                        tabIndex="0"
+                      >
+                        <i className="material-icons">
+                          close
+                        </i>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </>
-            )}
+                      {Boolean(dataCenter.alias) && (
+                        <div className="data-center-compare-panel__row">
+                          <h3 className="data-center-compare-panel__subtext">
+                            {dataCenter.alias.value}
+                          </h3>
+                        </div>
+                      )}
+                      {dataCenter.total_electrical_capacity.value >= 0 && (
+                        <div className="data-center-compare-panel__row">
+                          <div className="data-center-compare-panel__headline">
+                            Total Electrical Capacity
+                          </div>
+                          <div className="data-center-compare-panel__subtext">
+                            {dataCenter.total_electrical_capacity.value}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </>
+              )
+            }
           </div>
-
           <button
             className="data-center-compare-panel__button"
             disabled={dataCentersToCompare.length < 2}
             onClick={handleCompareButtonClick}
           >
-            {showComparison ? 'Go back' : 'Compare'}
+            {isDataCenterComparePanelComparisonOpen ? 'Go back' : 'Compare'}
           </button>
         </>
       )}

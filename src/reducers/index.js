@@ -32,6 +32,7 @@ const initialApplicationState = {
   // See https://github.com/visgl/react-map-gl/blob/master/docs/advanced/custom-components.md
   isHoveringExchange: false,
   isDataCenterComparePanelCollapsed: true,
+  isDataCenterComparePanelComparisonOpen: false,
   isLeftPanelCollapsed: false,
   isMovingMap: false,
   isLoadingMap: true,
