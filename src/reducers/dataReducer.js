@@ -71,70 +71,19 @@ module.exports = (state = initialDataState, action) => {
           action.payload.map(dataCenter => (
             Boolean(dataCenter) && {
               ...dataCenter,
-              alias: {
-                label: 'Name',
-                value: dataCenter.alias
-              },
-              consent_to_open_data: {
-                label: 'Consent to open data',
-                value: dataCenter.consent_to_open_data
-              },
-              created_at: {
-                label: 'Created at',
-                value: dataCenter.created_at
-              },
-              energy_input_rest_endpoint: {
-                label: 'Energy Input Rest Endpoint',
-                value: dataCenter.energy_input_rest_endpoint,
-                showInTooltip: true
-              },
-              energy_input_stream_endpoint: {
-                label: 'Energy Input Stream Endpoint',
-                value: dataCenter.energy_input_stream_endpoint,
-                showInTooltip: true
-              },
-              energy_input_stream_topic: {
-                label: 'Energy Input Stream Topic',
-                value: dataCenter.energy_input_stream_topic,
-                showInTooltip: true
-              },
-              energy_output_rest_endpoint: {
-                label: 'Energy Output Rest Endpoint',
-                value: dataCenter.energy_output_rest_endpoint,
-                showInTooltip: true
-              },
-              energy_output_stream_endpoint: {
-                label: 'Energy Output Stream Endpoint',
-                value: dataCenter.energy_output_stream_endpoint,
-                showInTooltip: true
-              },
-              energy_output_stream_topic: {
-                label: 'Energy Output Strem Topic',
-                value: dataCenter.energy_output_stream_topic,
-                showInTooltip: true
-              },
-              equipment_inventory_rest_endpoint: {
-                label: 'Equipment Inventory Rest Endpoint',
-                value: dataCenter.equipment_inventory_rest_endpoint,
-                showInTooltip: true
-              },
-              geo_lat: {
-                label: 'Lat',
-                value: dataCenter.geo_lat
-              },
-              geo_lon: {
-                label: 'Lng',
-                value: dataCenter.geo_lon
-              },
-              total_electrical_capacity: {
-                label: 'Total Electrical Capacity',
-                value: dataCenter.total_electrical_capacity,
-                showInTooltip: true
-              },
-              updated_at: {
-                lable: 'Updated at',
-                value: dataCenter.updated_at
-              }
+              consentToOpenData: dataCenter.consent_to_open_data,
+              createdAt: dataCenter.created_at,
+              energyInputRestEndpoint: dataCenter.energy_input_rest_endpoint,
+              energyInputStreamEndpoint: dataCenter.energy_input_stream_endpoint,
+              energyInputStreamTopic: dataCenter.energy_input_stream_topic,
+              energyOutputRestEndpoint: dataCenter.energy_output_rest_endpoint,
+              energyOutputStreamEndpoint: dataCenter.energy_output_stream_endpoint,
+              energyOutputStreamTopic: dataCenter.energy_output_stream_topic,
+              equipmentInventoryRestEndpoint: dataCenter.equipment_inventory_rest_endpoint,
+              lat: dataCenter.geo_lat,
+              lng: dataCenter.geo_lon,
+              totalElectricalCapacity: dataCenter.total_electrical_capacity,
+              updatedAt: dataCenter.updated_at
             }
           )) :
           null,

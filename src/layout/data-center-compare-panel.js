@@ -113,7 +113,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
                           key={index}
                           className="data-center-compare-panel__table-column"
                         >
-                          {dataCenter.alias.value}
+                          {dataCenter.alias}
                         </th>
                       ))}
                     </tr>
@@ -126,7 +126,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
                           key={index}
                           className="data-center-compare-panel__table-column"
                         >
-                          {dataCenter.total_electrical_capacity.value}
+                          {dataCenter.totalElectricalCapacity}
                         </td>
                       ))}
                     </tr>
@@ -156,17 +156,17 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
                       {Boolean(dataCenter.alias) && (
                         <div className="data-center-compare-panel__row">
                           <h3 className="data-center-compare-panel__subtext">
-                            {dataCenter.alias.value}
+                            {dataCenter.alias}
                           </h3>
                         </div>
                       )}
-                      {dataCenter.total_electrical_capacity.value >= 0 && (
+                      {dataCenter.totalElectricalCapacity >= 0 && (
                         <div className="data-center-compare-panel__row">
                           <div className="data-center-compare-panel__headline">
                             Total Electrical Capacity
                           </div>
                           <div className="data-center-compare-panel__subtext">
-                            {dataCenter.total_electrical_capacity.value}
+                            {dataCenter.totalElectricalCapacity}
                           </div>
                         </div>
                       )}
