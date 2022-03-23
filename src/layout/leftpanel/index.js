@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 // TODO: re-enable rules
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import {
@@ -16,13 +16,14 @@ import {
 import { dispatchApplication } from '../../store';
 import { useSearchParams } from '../../hooks/router';
 import { usePageViewsTracker } from '../../hooks/tracking';
-import { useSmallLoaderVisible } from '../../hooks/redux';
-import LastUpdatedTime from '../../components/lastupdatedtime';
+import DataCenterComparePanel from '../data-center-compare-panel';
 
 import FAQPanel from './faqpanel';
 import MobileInfoTab from './mobileinfotab';
 import ZoneDetailsPanel from './zonedetailspanel';
 import ZoneListPanel from './zonelistpanel';
+
+import { LEFT_PANEL_TAB_DATA_CENTER_FACILITIES, LEFT_PANEL_TAB_ELECTRICITY_MAP } from '../../reducers';
 
 const HandleLegacyRoutes = () => {
   const searchParams = useSearchParams();
@@ -47,19 +48,10 @@ const HandleLegacyRoutes = () => {
 
 // TODO: Move all styles from styles.css to here
 
-const SmallLoader = styled.span`
-  background: transparent url(${resolvePath('images/loading/loading64_FA.gif')}) no-repeat center center;
-  background-size: 1.5em;
-  display: inline-block;
-  margin-right: 1em;
-  width: 1.5em;
-  height: 1em;
-`;
-
 const mapStateToProps = state => ({
-  isLeftPanelCollapsed: state.application.isLeftPanelCollapsed,
+  isDataCenterComparePanelComparisonOpen: state.application.isDataCenterComparePanelComparisonOpen,
+  leftPanelCurrentTab: state.application.leftPanelCurrentTab,
 });
-
 
 const LeftPanelCollapseButton = styled.div`
 @media (max-width: 767px) {
@@ -73,64 +65,121 @@ const MobileHeader = styled.div`
 }
 `;
 
-const RightHeader = styled.div`
-@media (min-width: 768px) {
-  display: none !important;
-}
-`;
-
 // Hide the panel completely if looking at the map on small screens.
 const Container = styled.div`
   @media (max-width: 767px) {
-    display: ${props => props.pathname === '/map' ?  'none !important': 'flex'};
+    display: ${props => props.pathname === '/map' && props.currentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP ? 'none !important': 'flex'};
+
+    ~ #map-container {
+      display: ${props => props.currentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ? 'none !important': 'block'};
+    }
   }
 `;
 
-const LeftPanel = ({ isLeftPanelCollapsed }) => {
-  const isLoaderVisible = useSmallLoaderVisible();
+const LeftPanel = ({ isDataCenterComparePanelComparisonOpen, leftPanelCurrentTab }) => {
+  const defaultTabToggle = useRef(null);
+  const dataCenterFacilityComparisonTabToggle = useRef(null);
   const location = useLocation();
-  
+
+  const collapsedClass = 'collapsed';
+
   usePageViewsTracker();
-  
-  // TODO: Do this better when <Switch> is pulled up the hierarchy.
-  const collapsedClass = isLeftPanelCollapsed ? 'collapsed' : '';
-  
+
+  const handleDefaultToggleButtonClick = () => {
+    dispatchApplication('leftPanelCurrentTab', leftPanelCurrentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP ? null : LEFT_PANEL_TAB_ELECTRICITY_MAP);
+  }
+
+  const handleDataCenterTogglePanelButtonClick = () => {
+    dispatchApplication('leftPanelCurrentTab', leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ? null : LEFT_PANEL_TAB_DATA_CENTER_FACILITIES);
+  }
+
+  useEffect(() => {
+    if (leftPanelCurrentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP) {
+      defaultTabToggle.current.classList.remove('inactive');
+      defaultTabToggle.current.classList.remove(collapsedClass);
+
+      dataCenterFacilityComparisonTabToggle.current.classList.add('inactive');
+      dataCenterFacilityComparisonTabToggle.current.classList.remove(collapsedClass);
+    }
+    else if (leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES) {
+      defaultTabToggle.current.classList.add('inactive');
+      defaultTabToggle.current.classList.remove(collapsedClass);
+
+      dataCenterFacilityComparisonTabToggle.current.classList.remove('inactive');
+      dataCenterFacilityComparisonTabToggle.current.classList.remove(collapsedClass);
+    } else {
+      defaultTabToggle.current.classList.add(collapsedClass);
+      defaultTabToggle.current.classList.remove('inactive');
+
+      dataCenterFacilityComparisonTabToggle.current.classList.add(collapsedClass);
+      dataCenterFacilityComparisonTabToggle.current.classList.remove('inactive');
+    }
+  }, [leftPanelCurrentTab])
+
+  const expandPanel = isDataCenterComparePanelComparisonOpen && leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES;
 
   return (
-    <Container pathname={location.pathname} className={`panel left-panel ${collapsedClass}`}>
-
+    <Container
+      className={`panel left-panel${expandPanel ? ' left-panel--expanded' : ''}${!leftPanelCurrentTab ? ` ${collapsedClass}` : ''}`}
+      currentTab={leftPanelCurrentTab}
+      pathname={location.pathname}
+    >
       <MobileHeader id="mobile-header" className="brightmode">
         <div className="header-content">
           <div className="logo">
             <div className="image" id="electricitymap-logo" />
           </div>
-          <RightHeader className="right-header">
-            {isLoaderVisible && <SmallLoader />}
-            <LastUpdatedTime />
-          </RightHeader>
+          <div className="sdia-logo">
+            <div className="image" id="sdia-logo" />
+          </div>
         </div>
       </MobileHeader>
 
       <LeftPanelCollapseButton
+        ref={defaultTabToggle}
         id="left-panel-collapse-button"
-        className={`${collapsedClass}`}
-        onClick={() => dispatchApplication('isLeftPanelCollapsed', !isLeftPanelCollapsed)}
+        className={collapsedClass}
         role="button"
         tabIndex="0"
+        onClick={handleDefaultToggleButtonClick}
       >
-        <i className="material-icons">arrow_drop_down</i>
+        <i className="material-icons">
+          arrow_drop_down
+        </i>
       </LeftPanelCollapseButton>
 
-      {/* Render different content based on the current route */}
-      <Switch>
-        <Route exact path="/" component={HandleLegacyRoutes} />
-        <Route path="/map" component={ZoneListPanel} />
-        <Route path="/ranking" component={ZoneListPanel} />
-        <Route path="/zone/:zoneId" component={ZoneDetailsPanel} />
-        <Route path="/info" component={MobileInfoTab} />
-        <Route path="/faq" component={FAQPanel} />
-        {/* TODO: Consider adding a 404 page  */}
-      </Switch>
+      <LeftPanelCollapseButton
+        ref={dataCenterFacilityComparisonTabToggle}
+        id="left-panel-collapse-button"
+        className={`data-center-facilities ${collapsedClass}`}
+        role="button"
+        tabIndex="0"
+        onClick={handleDataCenterTogglePanelButtonClick}
+      >
+        <i className="material-icons">
+          arrow_drop_down
+        </i>
+      </LeftPanelCollapseButton>
+
+      {leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ?
+        (
+          <DataCenterComparePanel />
+        ) :
+        (
+          <>
+              {/* Render different content based on the current route */}
+              <Switch>
+              <Route exact path="/" component={HandleLegacyRoutes} />
+              <Route path="/map" component={ZoneListPanel} />
+              <Route path="/ranking" component={ZoneListPanel} />
+              <Route path="/zone/:zoneId" component={ZoneDetailsPanel} />
+              <Route path="/info" component={MobileInfoTab} />
+              <Route path="/faq" component={FAQPanel} />
+              {/* TODO: Consider adding a 404 page  */}
+            </Switch>
+          </>
+        )
+      }
     </Container>
   );
 };

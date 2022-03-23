@@ -1,15 +1,10 @@
 .data-center-compare-panel {
-  position: absolute;
   display: flex;
   flex-direction: column;
   padding-top: 2rem;
   padding-bottom: 2rem;
-  width: calc(14vw + 16rem);
-  background-color: $lighter-gray;
-  box-shadow: 0 24px 15px rgba(0,0,0,0.2);
   box-sizing: border-box;
   transition: transform 0.4s, box-shadow 0.4s, width 0.4s;
-  z-index: 2;
 
   // .data-center-compare-panel__box:not(:last-of-type)
   &__box:not(:last-of-type) {
@@ -36,38 +31,6 @@
     }
   }
 
-  // .data-center-compare-panel__close
-  &__close {
-    cursor: pointer;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    top: 4rem;
-    left: 100%;
-    height: 3rem;
-    width: 1.5rem;
-    color: black;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    background-color: $lighter-gray;
-    box-shadow: 6px 2px 10px -3px rgba(0,0,0,0.10);
-    outline: 0;
-
-    i {
-      transform: rotate(90deg);
-    }
-
-    &.collapsed i {
-      transform: rotate(-90deg);
-    }
-
-    @include respond-to('small') {
-      display: none;
-    }
-  }
-
   // .data-center-compare-panel__close-mobile
   &__close-mobile {
     position: absolute;
@@ -75,7 +38,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    top: 4.8rem;
+    top: 1.5rem;
     right: 2rem;
     height: 2rem;
     width: 2rem;
@@ -92,7 +55,7 @@
 
   // .data-center-compare-panel__content
   &__content {
-    overflow-y: auto;
+    overflow: auto;
     padding: 0 3rem 3rem;
 
     @include respond-to('small') {
@@ -121,6 +84,10 @@
   &__empty-content-title {
     margin-left: 3rem;
     margin-right: 3rem;
+
+    @include respond-to('small') {
+      margin: 2rem;
+    }
   }
 
   // .data-center-compare-panel__headline
@@ -216,21 +183,6 @@
     display: block;
   }
 
-  // .data-center-compare-panel collapsed
-  &.collapsed {
-    transform: translate(-100%);
-    box-shadow: 0 24px 15px rgba(0,0,0,0);
-  }
-
-  // .data-center-compare-panel--expanded
-  &--expanded {
-    width: 80%;
-
-    @include respond-to('small') {
-      width: 100%;
-    }
-  }
-
   @include respond-to('medium-up') {
     height: 100%; /* Should only be set on desktop */
   }
@@ -239,10 +191,5 @@
     padding: 0;
     position: relative;
     width: 100%;
-
-    // .data-center-compare-panel:not(.collapsed) ~ #map-container
-    &:not(.collapsed) ~ #map-container {
-      display: none;
-    }
   }
 }

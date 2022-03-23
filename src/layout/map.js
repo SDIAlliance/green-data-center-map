@@ -23,6 +23,8 @@ import ExchangeLayer from '../components/layers/exchangelayer';
 import SolarLayer from '../components/layers/solarlayer';
 import WindLayer from '../components/layers/windlayer';
 
+import { LEFT_PANEL_TAB_DATA_CENTER_FACILITIES } from '../reducers';
+
 const debouncedReleaseMoving = debounce(() => { dispatchApplication('isMovingMap', false); }, 200);
 
 export default () => {
@@ -123,9 +125,8 @@ export default () => {
   const handleDataCenterClick = useMemo(
     () => (data) => {
       if (data) {
-        dispatchApplication('isLeftPanelCollapsed', true);
-        dispatchApplication('isDataCenterComparePanelCollapsed', false);
         dispatchApplication('isDataCenterComparePanelComparisonOpen', false);
+        dispatchApplication('leftPanelCurrentTab', LEFT_PANEL_TAB_DATA_CENTER_FACILITIES);
       }
 
       // NOTE: This is commented so that we can add the same Data Center for comparison, as we only get one from the API response

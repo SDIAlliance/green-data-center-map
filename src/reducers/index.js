@@ -13,6 +13,9 @@ const cookieGetBool = (key, defaultValue) => {
   return val === 'true';
 };
 
+const LEFT_PANEL_TAB_DATA_CENTER_FACILITIES = 'data-center-facilities';
+const LEFT_PANEL_TAB_ELECTRICITY_MAP = 'electricity-map';
+
 const initialApplicationState = {
   // Here we will store non-data specific state (to be sent in analytics and crash reporting)
   allDataCentersToCompare: null,
@@ -33,13 +36,13 @@ const initialApplicationState = {
   isHoveringExchange: false,
   isDataCenterComparePanelCollapsed: true,
   isDataCenterComparePanelComparisonOpen: false,
-  isLeftPanelCollapsed: false,
   isMovingMap: false,
   isLoadingMap: true,
   isMobile:
-    (/android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i).test(navigator.userAgent),
+  (/android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i).test(navigator.userAgent),
   isProduction: isProduction(),
   isLocalhost: isLocalhost(),
+  leftPanelCurrentTab: LEFT_PANEL_TAB_ELECTRICITY_MAP,
   legendVisible: true,
   locale: window.locale,
   mapViewport: {
@@ -81,6 +84,11 @@ const applicationReducer = (state = initialApplicationState, action) => {
     default:
       return state;
   }
+};
+
+export {
+  LEFT_PANEL_TAB_DATA_CENTER_FACILITIES,
+  LEFT_PANEL_TAB_ELECTRICITY_MAP
 };
 
 export default combineReducers({

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import styled from 'styled-components';
 
 import { dispatchApplication } from '../store';
 import { usePageViewsTracker } from '../hooks/tracking';
@@ -11,26 +10,18 @@ const mapStateToProps = state => ({
   isDataCenterComparePanelComparisonOpen: state.application.isDataCenterComparePanelComparisonOpen
 });
 
-const MobileHeader = styled.div`
-@media (min-width: 768px) {
-  display: none !important;
-}
-`;
-
-const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCenterComparePanelComparisonOpen }) => {
+const DataCenterComparePanel = ({ isDataCenterComparePanelComparisonOpen }) => {
   const dataCentersToCompare = useSelector(state => state.application.allDataCentersToCompare);
   const [dataCenters, setDataCenters] = useState(null);
 
   usePageViewsTracker();
-
-  const collapsedClass = isDataCenterComparePanelCollapsed ? 'collapsed' : '';
 
   const handleCompareButtonClick = () => {
     dispatchApplication('isDataCenterComparePanelComparisonOpen', !isDataCenterComparePanelComparisonOpen);
   };
 
   const handleTogglePanelButtonClick = () => {
-    dispatchApplication('isDataCenterComparePanelCollapsed', !isDataCenterComparePanelCollapsed);
+    dispatchApplication('leftPanelCurrentTab', null);
   };
 
   const handleRemoveDataCenterClick = (index) => {
@@ -45,38 +36,11 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
   useEffect(() => {
     if (dataCenters) {
       dispatchApplication('allDataCentersToCompare', dataCenters);
-
-      if (!dataCenters.length) {
-        dispatchApplication('isDataCenterComparePanelCollapsed', true);
-        dispatchApplication('isDataCenterComparePanelComparisonOpen', true);
-      }
     }
    }, [dataCenters])
 
   return (
-    <div className={`data-center-compare-panel${isDataCenterComparePanelComparisonOpen ? ' data-center-compare-panel--expanded' : ''} ${collapsedClass}`}>
-      <MobileHeader id="mobile-header" className="brightmode">
-        <div className="header-content">
-          <div className="logo">
-            <div className="image" id="electricitymap-logo" />
-          </div>
-          <div className="sdia-logo">
-            <div className="image" id="sdia-logo" />
-          </div>
-        </div>
-      </MobileHeader>
-      
-      <div
-        className={`data-center-compare-panel__close ${collapsedClass}`}
-        onClick={handleTogglePanelButtonClick}
-        role="button"
-        tabIndex="0"
-      >
-        <i className="material-icons">
-          arrow_drop_down
-        </i>
-      </div>
-
+    <div className="data-center-compare-panel">
       <div
         className="data-center-compare-panel__close-mobile"
         onClick={handleTogglePanelButtonClick}
