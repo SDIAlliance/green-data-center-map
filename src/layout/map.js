@@ -125,6 +125,7 @@ export default () => {
       if (data) {
         dispatchApplication('isLeftPanelCollapsed', true);
         dispatchApplication('isDataCenterComparePanelCollapsed', false);
+        dispatchApplication('isDataCenterComparePanelComparisonOpen', false);
       }
 
       // NOTE: This is commented so that we can add the same Data Center for comparison, as we only get one from the API response
