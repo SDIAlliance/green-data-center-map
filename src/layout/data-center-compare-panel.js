@@ -111,14 +111,40 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
                       {dataCentersToCompare.map((dataCenter, index) => (
                         <th
                           key={index}
-                          className="data-center-compare-panel__table-column data-center-compare-panel__table-column--uppercase"
+                          className="data-center-compare-panel__table-header data-center-compare-panel__table-header--uppercase"
                         >
                           {dataCenter.alias}
                         </th>
                       ))}
                     </tr>
                     <tr className="data-center-compare-panel__table-row">
-                      <td className="data-center-compare-panel__table-column">
+                      <td className="data-center-compare-panel__table-column data-center-compare-panel__table-column--bold">
+                        Energy Input Stream Topic
+                      </td>
+                      {dataCentersToCompare.map((dataCenter, index) => (
+                        <td
+                          key={index}
+                          className="data-center-compare-panel__table-column"
+                        >
+                          {dataCenter.energyInputStreamTopic}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr className="data-center-compare-panel__table-row">
+                      <td className="data-center-compare-panel__table-column data-center-compare-panel__table-column--bold">
+                        Energy Output Stream Topic
+                      </td>
+                      {dataCentersToCompare.map((dataCenter, index) => (
+                        <td
+                          key={index}
+                          className="data-center-compare-panel__table-column"
+                        >
+                          {dataCenter.energyOutputStreamTopic}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr className="data-center-compare-panel__table-row">
+                      <td className="data-center-compare-panel__table-column data-center-compare-panel__table-column--bold">
                         Total Electrical Capacity
                       </td>
                       {dataCentersToCompare.map((dataCenter, index) => (
