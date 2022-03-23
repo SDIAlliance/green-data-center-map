@@ -111,7 +111,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
                       {dataCentersToCompare.map((dataCenter, index) => (
                         <th
                           key={index}
-                          className="data-center-compare-panel__table-column"
+                          className="data-center-compare-panel__table-column data-center-compare-panel__table-column--uppercase"
                         >
                           {dataCenter.alias}
                         </th>
@@ -155,7 +155,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
                       </div>
                       {Boolean(dataCenter.alias) && (
                         <div className="data-center-compare-panel__row">
-                          <h3 className="data-center-compare-panel__subtext">
+                          <h3 className="data-center-compare-panel__subtext data-center-compare-panel__subtext--uppercase">
                             {dataCenter.alias}
                           </h3>
                         </div>
