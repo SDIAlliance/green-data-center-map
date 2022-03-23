@@ -42,6 +42,11 @@ const Logo = styled.img`
   height: 24px;
 `;
 
+const LogoSDIA = styled.img`
+  height: 24px;
+  margin-left: 24px;
+`;
+
 const linkUnderline = css`
   &:after {
     background: #62B252;
@@ -151,10 +156,14 @@ const SharedHeader = ({
   inverted = false,
   links = [],
   logo,
+  SDIAlogo
 }) => (
   <Wrapper inverted={inverted} collapsed={collapsed}>
     <a href="https://app.electricitymap.org/map">
       <Logo src={logo} alt="logo" />
+    </a>
+    <a href="https://sdialliance.org/">
+      <LogoSDIA src={SDIAlogo} alt="SDIA logo" />
     </a>
     <ResponsiveMenu collapsed={collapsed}>
       {links.map(({ label, href, active }) => (

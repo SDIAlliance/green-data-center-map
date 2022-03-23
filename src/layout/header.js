@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SharedHeader from '../components/sharedheader';
 
 const logo = resolvePath('images/electricitymap-logo.svg');
+const SDIAlogo = resolvePath('images/sdia-logo-dark.png');
 
 const headerLinks = [
   {
@@ -23,7 +24,11 @@ const Container = styled.div`
 
 const Header = () => (
   <Container>
-    <SharedHeader logo={logo} links={headerLinks} />
+    <SharedHeader
+      logo={logo}
+      links={headerLinks}
+      SDIAlogo={SDIAlogo}
+    />
   </Container>
 );
 

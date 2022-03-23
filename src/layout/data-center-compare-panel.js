@@ -60,6 +60,9 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
           <div className="logo">
             <div className="image" id="electricitymap-logo" />
           </div>
+          <div className="sdia-logo">
+            <div className="image" id="sdia-logo" />
+          </div>
         </div>
       </MobileHeader>
       
