@@ -186,16 +186,6 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed, isDataCente
                           </h3>
                         </div>
                       )}
-                      {dataCenter.totalElectricalCapacity >= 0 && (
-                        <div className="data-center-compare-panel__row">
-                          <div className="data-center-compare-panel__headline">
-                            Total Electrical Capacity
-                          </div>
-                          <div className="data-center-compare-panel__subtext">
-                            {dataCenter.totalElectricalCapacity}
-                          </div>
-                        </div>
-                      )}
                     </div>
                   ))}
                 </>
