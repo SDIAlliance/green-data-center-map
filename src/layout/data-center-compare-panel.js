@@ -66,7 +66,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
             {showComparison ?
             (
               <div>
-                <h3>
+                <h3 className="data-center-compare-panel__title">
                   Data Center Comparison
                 </h3>
                 <table className="data-center-compare-panel__table">
@@ -101,7 +101,7 @@ const DataCenterComparePanel = ({ isDataCenterComparePanelCollapsed }) => {
             ) :
             (
               <>
-                <h3>
+                <h3 className="data-center-compare-panel__title">
                   Selected Data Centers
                 </h3>
                 {dataCentersToCompare.map((dataCenter, index) => (

@@ -112,11 +112,11 @@
 
   // .data-center-compare-panel__table
   &__table {
-    margin-top: 3rem;
     text-align: left;
-    border-collapse: collapse;
-    border-radius: 1em;
     width: 100%;
+    border-collapse: collapse;
+    border-radius: 0.3rem;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
     overflow: hidden;
   }
 
@@ -127,6 +127,11 @@
     padding: 1rem;
     background: #fff;
     border-bottom: 2px solid $lighter-gray;
+  }
+
+  // .data-center-compare-panel__title
+  &__title {
+    margin-bottom: 3rem;
   }
 
   // .data-center-compare-panel svg
