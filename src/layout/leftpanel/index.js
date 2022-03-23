@@ -144,7 +144,7 @@ const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, leftPanel
         onClick={handleDefaultToggleButtonClick}
       >
         <i className="material-icons">
-          arrow_drop_down
+          wb_sunny
         </i>
       </LeftPanelCollapseButton>
 
@@ -157,7 +157,7 @@ const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, leftPanel
         onClick={handleDataCenterFacilitiesTogglePanelButtonClick}
       >
         <i className="material-icons">
-          arrow_drop_down
+          storage
         </i>
       </LeftPanelCollapseButton>
 
