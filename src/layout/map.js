@@ -23,7 +23,7 @@ import ExchangeLayer from '../components/layers/exchangelayer';
 import SolarLayer from '../components/layers/solarlayer';
 import WindLayer from '../components/layers/windlayer';
 
-import { LEFT_PANEL_TAB_DATA_CENTER_FACILITIES } from '../reducers';
+import { LEFT_PANEL_TAB_DATA_CENTER_FACILITIES, LEFT_PANEL_TAB_ELECTRICITY_MAP } from '../reducers';
 
 const debouncedReleaseMoving = debounce(() => { dispatchApplication('isMovingMap', false); }, 200);
 
@@ -163,7 +163,8 @@ export default () => {
     () => (id) => {
       trackEvent('countryClick');
       dispatchApplication('isDataCenterComparePanelCollapsed', true);
-      dispatchApplication('isLeftPanelCollapsed', false);
+      dispatchApplication('leftPanelCurrentTab', LEFT_PANEL_TAB_ELECTRICITY_MAP);
+
       history.push({ pathname: `/zone/${id}`, search: location.search });
     },
     [trackEvent, history, location],
