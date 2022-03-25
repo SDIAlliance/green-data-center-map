@@ -176,25 +176,23 @@ const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, currentTa
         </i>
       </LeftPanelCollapseButton>
 
-      {currentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ?
-        (
-          <DataCenterFacilitiesComparePanel />
-        ) :
-        (
-          <>
-              {/* Render different content based on the current route */}
-              <Switch>
-              <Route exact path="/" component={HandleLegacyRoutes} />
-              <Route path="/map" component={ZoneListPanel} />
-              <Route path="/ranking" component={ZoneListPanel} />
-              <Route path="/zone/:zoneId" component={ZoneDetailsPanel} />
-              <Route path="/info" component={MobileInfoTab} />
-              <Route path="/faq" component={FAQPanel} />
-              {/* TODO: Consider adding a 404 page  */}
-            </Switch>
-          </>
-        )
-      }
+      {currentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES && (
+        <DataCenterFacilitiesComparePanel />
+      )}
+      {currentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP && (
+        <>
+          {/* Render different content based on the current route */}
+          <Switch>
+            <Route exact path="/" component={HandleLegacyRoutes} />
+            <Route path="/map" component={ZoneListPanel} />
+            <Route path="/ranking" component={ZoneListPanel} />
+            <Route path="/zone/:zoneId" component={ZoneDetailsPanel} />
+            <Route path="/info" component={MobileInfoTab} />
+            <Route path="/faq" component={FAQPanel} />
+            {/* TODO: Consider adding a 404 page  */}
+          </Switch>
+        </>
+      )}
     </Container>
   );
 };
