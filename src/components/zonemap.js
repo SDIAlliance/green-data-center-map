@@ -159,15 +159,19 @@ const ZoneMap = ({
     () => (e) => {
       if (ref.current && ref.current.state && !ref.current.state.isDragging) {
         const features = ref.current.queryRenderedFeatures(e.point);
-        const featuresProperties = Array.isArray(features) && Boolean(features[0]) && Boolean(features[0].properties);
+        const feature = Array.isArray(features) ?
+          features[0] :
+          null;
 
-        if (featuresProperties) {
-          const { dataCenterFacilityId, zoneId } = features[0].properties;
+        if (feature && feature.properties) {
+          const { dataCenterFacilityId, zoneId } = feature.properties;
 
           if (dataCenterFacilityId) {
-            onDataCenterFacilityClick(dataCenterFacilities.find(dataCenterFacility => dataCenterFacility.id === features[0].properties.dataCenterFacilityId));
+            const dataCenterFacility = dataCenterFacilities.find(entry => entry.id === dataCenterFacilityId);
+
+            onDataCenterFacilityClick(dataCenterFacility);
           } else if (zoneId) {
-            onZoneClick(features[0].properties.zoneId);
+            onZoneClick(zoneId);
           }
         }
 
@@ -196,30 +200,43 @@ const ZoneMap = ({
           // Trigger onZoneMouseEnter if mouse enters a different
           // zone and onZoneMouseLeave when it leaves all zones.
           if (!isEmpty(features) && hoveringEnabled) {
-            if (Array.isArray(features) && Boolean(features[0].properties)) {
-              const { dataCenterFacilityId, zoneId } = features[0].properties;
+            const feature = Array.isArray(features) ?
+              features[0] :
+              null;
+
+            if (feature && feature.properties) {
+              const { dataCenterFacilityId, zoneId } = feature.properties;
 
               if (zoneId) {
                 if (hoveredZoneId !== zoneId) {
                   onDataCenterFacilityMouseLeave();
                   setHoveredDataCenterFacilityId(null);
+
                   onZoneMouseEnter(zones[zoneId], zoneId);
                   setHoveredZoneId(zoneId);
                 }
               } else if (dataCenterFacilityId) {
                 if (hoveredDataCenterFacilityId !== dataCenterFacilityId) {
+                  const dataCenterFacility = dataCenterFacilities.find(entry => entry.id === dataCenterFacilityId);
+
                   onZoneMouseLeave();
                   setHoveredZoneId(null);
-                  onDataCenterFacilityMouseEnter(dataCenterFacilities.find(dataCenterFacility => dataCenterFacility.id === dataCenterFacilityId));
+
+                  onDataCenterFacilityMouseEnter(dataCenterFacility);
                   setHoveredDataCenterFacilityId(dataCenterFacilityId);
                 }
               }
             }
-          } else if (hoveredZoneId !== null || hoveredDataCenterFacilityId !== null) {
-            onDataCenterFacilityMouseLeave();
-            onZoneMouseLeave();
-            setHoveredZoneId(null);
-            setHoveredDataCenterFacilityId(null);
+          } else {
+            if (hoveredZoneId !== null) {
+              onZoneMouseLeave();
+              setHoveredZoneId(null);
+            }
+
+            if (hoveredDataCenterFacilityId !== null) {
+              onDataCenterFacilityMouseLeave();
+              setHoveredDataCenterFacilityId(null);
+            }
           }
         }
       }

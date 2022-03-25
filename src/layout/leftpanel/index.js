@@ -48,10 +48,17 @@ const HandleLegacyRoutes = () => {
 
 // TODO: Move all styles from styles.css to here
 
-const mapStateToProps = state => ({
-  isDataCenterFacilitiesComparePanelComparisonOpen: state.application.isDataCenterFacilitiesComparePanelComparisonOpen,
-  leftPanelCurrentTab: state.application.leftPanelCurrentTab,
-});
+const mapStateToProps = state => {
+  const {
+    isDataCenterFacilitiesComparePanelComparisonOpen,
+    leftPanelCurrentTab
+  } = state.application;
+
+  return {
+    isDataCenterFacilitiesComparePanelComparisonOpen,
+    currentTab: leftPanelCurrentTab
+  };
+};
 
 const LeftPanelCollapseButton = styled.div`
 @media (max-width: 767px) {
@@ -76,7 +83,7 @@ const Container = styled.div`
   }
 `;
 
-const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, leftPanelCurrentTab }) => {
+const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, currentTab }) => {
   const defaultTabToggle = useRef(null);
   const dataCenterFacilitiesComparisonTabToggle = useRef(null);
   const location = useLocation();
@@ -86,22 +93,30 @@ const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, leftPanel
   usePageViewsTracker();
 
   const handleDefaultToggleButtonClick = () => {
-    dispatchApplication('leftPanelCurrentTab', leftPanelCurrentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP ? null : LEFT_PANEL_TAB_ELECTRICITY_MAP);
+    const tab = currentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP ?
+      null :
+      LEFT_PANEL_TAB_ELECTRICITY_MAP;
+
+    dispatchApplication('leftPanelCurrentTab', tab);
   }
 
   const handleDataCenterFacilitiesTogglePanelButtonClick = () => {
-    dispatchApplication('leftPanelCurrentTab', leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ? null : LEFT_PANEL_TAB_DATA_CENTER_FACILITIES);
+    const tab = currentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ?
+      null :
+      LEFT_PANEL_TAB_DATA_CENTER_FACILITIES;
+
+    dispatchApplication('leftPanelCurrentTab', tab);
   }
 
   useEffect(() => {
-    if (leftPanelCurrentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP) {
+    if (currentTab === LEFT_PANEL_TAB_ELECTRICITY_MAP) {
       defaultTabToggle.current.classList.remove('inactive');
       defaultTabToggle.current.classList.remove(collapsedClass);
 
       dataCenterFacilitiesComparisonTabToggle.current.classList.add('inactive');
       dataCenterFacilitiesComparisonTabToggle.current.classList.remove(collapsedClass);
     }
-    else if (leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES) {
+    else if (currentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES) {
       defaultTabToggle.current.classList.add('inactive');
       defaultTabToggle.current.classList.remove(collapsedClass);
 
@@ -114,14 +129,14 @@ const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, leftPanel
       dataCenterFacilitiesComparisonTabToggle.current.classList.add(collapsedClass);
       dataCenterFacilitiesComparisonTabToggle.current.classList.remove('inactive');
     }
-  }, [leftPanelCurrentTab])
+  }, [currentTab])
 
-  const expandPanel = isDataCenterFacilitiesComparePanelComparisonOpen && leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES;
+  const expandPanel = currentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES && isDataCenterFacilitiesComparePanelComparisonOpen;
 
   return (
     <Container
-      className={`panel left-panel${expandPanel ? ' left-panel--expanded' : ''}${!leftPanelCurrentTab ? ` ${collapsedClass}` : ''}`}
-      currentTab={leftPanelCurrentTab}
+      className={`panel left-panel${expandPanel ? ' left-panel--expanded' : ''}${!currentTab ? ` ${collapsedClass}` : ''}`}
+      currentTab={currentTab}
       pathname={location.pathname}
     >
       <MobileHeader id="mobile-header" className="brightmode">
@@ -161,7 +176,7 @@ const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, leftPanel
         </i>
       </LeftPanelCollapseButton>
 
-      {leftPanelCurrentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ?
+      {currentTab === LEFT_PANEL_TAB_DATA_CENTER_FACILITIES ?
         (
           <DataCenterFacilitiesComparePanel />
         ) :

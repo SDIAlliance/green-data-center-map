@@ -5,10 +5,17 @@ import { dispatchApplication } from '../store';
 import { usePageViewsTracker } from '../hooks/tracking';
 
 
-const mapStateToProps = state => ({
-  isDataCenterFacilitiesComparePanelCollapsed: state.application.isDataCenterFacilitiesComparePanelCollapsed,
-  isDataCenterFacilitiesComparePanelComparisonOpen: state.application.isDataCenterFacilitiesComparePanelComparisonOpen
-});
+const mapStateToProps = state => {
+  const {
+    isDataCenterFacilitiesComparePanelCollapsed,
+    isDataCenterFacilitiesComparePanelComparisonOpen
+  } = state.application;
+
+  return {
+    isDataCenterFacilitiesComparePanelCollapsed,
+    isDataCenterFacilitiesComparePanelComparisonOpen
+  };
+};
 
 const DataCenterFacilitiesComparePanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen }) => {
   const dataCenterFacilitiesToCompare = useSelector(state => state.application.allDataCenterFacilitiesToCompare);
