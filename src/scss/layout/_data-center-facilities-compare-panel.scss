@@ -179,6 +179,10 @@
     margin-left: 1rem;
     display: flex;
 
+    i {
+      font-size: 16px;
+    }
+
     // .data-center-facilities-compare-panel__table-remove-data-center-facility-icon:hover
     &:hover {
       cursor: pointer;
