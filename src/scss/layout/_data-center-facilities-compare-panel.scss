@@ -98,7 +98,7 @@
     margin-bottom: auto;
   }
 
-  // .data-center-facilities-compare-panel__headline__remove-data-center-facility
+  // .data-center-facilities-compare-panel__remove-data-center-facility
   &__remove-data-center-facility {
     cursor: pointer;
     position: absolute;
@@ -165,6 +165,23 @@
     // .data-center-facilities-compare-panel__table-column--uppercase
     &--uppercase {
       text-transform: uppercase;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__table-remove-data-center-facility
+  &__table-remove-data-center-facility {
+    display: flex;
+    align-items: center;
+  }
+
+  // .data-center-facilities-compare-panel__table-remove-data-center-facility-icon
+  &__table-remove-data-center-facility-icon {
+    margin-left: 1rem;
+    display: flex;
+
+    // .data-center-facilities-compare-panel__table-remove-data-center-facility-icon:hover
+    &:hover {
+      cursor: pointer;
     }
   }
 

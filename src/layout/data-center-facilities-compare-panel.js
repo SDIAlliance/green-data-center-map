@@ -39,6 +39,12 @@ const DataCenterFacilitiesComparePanel = ({ isDataCenterFacilitiesComparePanelCo
     }
    }, [dataCenterFacilities])
 
+   useEffect(() => {
+    if (Array.isArray(dataCenterFacilitiesToCompare) && dataCenterFacilitiesToCompare.length <= 1) {
+      dispatchApplication('isDataCenterFacilitiesComparePanelComparisonOpen', false);
+    }
+   }, [dataCenterFacilitiesToCompare])
+
   return (
     <div className="data-center-facilities-compare-panel">
       <div
@@ -77,7 +83,19 @@ const DataCenterFacilitiesComparePanel = ({ isDataCenterFacilitiesComparePanelCo
                           key={index}
                           className="data-center-facilities-compare-panel__table-header data-center-facilities-compare-panel__table-header--uppercase"
                         >
-                          {dataCenterFacility.alias}
+                          <div className="data-center-facilities-compare-panel__table-remove-data-center-facility">
+                            {dataCenterFacility.alias}
+                            <div
+                              className="data-center-facilities-compare-panel__table-remove-data-center-facility-icon"
+                              onClick={() => handleRemoveDataCenterFacilityClick(index)}
+                              role="button"
+                              tabIndex="0"
+                            >
+                              <i className="material-icons">
+                                close
+                              </i>
+                            </div>
+                          </div>
                         </th>
                       ))}
                     </tr>
