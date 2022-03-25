@@ -44,7 +44,7 @@
     }
 
     &.inactive {
-        background-color: darken($lighter-gray, 10%);
+        background-color: darken($lighter-gray, 20%);
     }
 
     @include respond-to('small') {
@@ -135,6 +135,7 @@
 
     @include respond-to('medium-up') {
         height: 100%; /* Should only be set on desktop */
+        z-index: 10;
     }
 
     @include respond-to('small') {
