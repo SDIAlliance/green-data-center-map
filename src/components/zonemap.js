@@ -157,7 +157,7 @@ const ZoneMap = ({
 
   const handleClick = useMemo(
     () => (e) => {
-      if (ref.current && !ref.current.state.isDragging) {
+      if (ref.current && ref.current.state && !ref.current.state.isDragging) {
         const features = ref.current.queryRenderedFeatures(e.point);
         const featuresProperties = Array.isArray(features) && Boolean(features[0]) && Boolean(features[0].properties);
 
