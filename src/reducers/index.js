@@ -39,7 +39,7 @@ const initialApplicationState = {
   isMovingMap: false,
   isLoadingMap: true,
   isMobile:
-  (/android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i).test(navigator.userAgent),
+    (/android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i).test(navigator.userAgent),
   isProduction: isProduction(),
   isLocalhost: isLocalhost(),
   leftPanelCurrentTab: LEFT_PANEL_TAB_ELECTRICITY_MAP,
