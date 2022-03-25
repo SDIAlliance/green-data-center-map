@@ -6,6 +6,7 @@ import {
 } from 'redux-saga/effects';
 
 import thirdPartyServices from '../services/thirdparty';
+import { fetchDataCenterFacilitiesApiRequest } from '../helpers/open-data-hub-api/data-center-facilities';
 import { handleRequestError, protectedJsonRequest } from '../helpers/api';
 import { history } from '../helpers/router';
 import {
@@ -16,7 +17,7 @@ import {
 
 function* fetchZoneHistory(action) {
   const { zoneId, features } = action.payload;
-  let endpoint = `/v4/history?countryCode=${zoneId}`;
+  let endpoint = `/v3/history?countryCode=${zoneId}`;
 
   if (features.length > 0) {
     endpoint += features.map(f => `&${f}=true`);
@@ -33,7 +34,7 @@ function* fetchZoneHistory(action) {
 
 function* fetchGridData(action) {
   const { features } = action.payload || {};
-  let endpoint = '/v4/state';
+  let endpoint = '/v3/state';
 
   if (features.length > 0) {
     endpoint += features.map(f => `&${f}=true`);
@@ -100,8 +101,21 @@ function* trackEvent(action) {
   );
 }
 
+function* fetchDataCenterFacilities() {
+  const endpoint = `/data-center-facilities`;
+
+  try {
+    const payload = yield call(fetchDataCenterFacilitiesApiRequest, endpoint);
+    yield put({ type: 'DATA_CENTERS_FETCH_SUCCEEDED', payload });
+  } catch (err) {
+    yield put({ type: 'DATA_CENTERS_FETCH_FAILED' });
+    handleRequestError(err);
+  }
+}
+
 export default function* () {
   // Data fetching
+  yield takeLatest('DATA_CENTERS_FETCH_REQUESTED', fetchDataCenterFacilities)
   yield takeLatest('GRID_DATA_FETCH_REQUESTED', fetchGridData);
   yield takeLatest('WIND_DATA_FETCH_REQUESTED', fetchWindData);
   yield takeLatest('SOLAR_DATA_FETCH_REQUESTED', fetchSolarData);

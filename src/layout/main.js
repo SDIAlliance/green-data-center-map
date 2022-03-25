@@ -24,6 +24,7 @@ import {
   useGridDataPolling,
   useConditionalWindDataPolling,
   useConditionalSolarDataPolling,
+  useRequestDataCenterFacilities
 } from '../hooks/fetch';
 import { dispatchApplication } from '../store';
 import OnboardingModal from '../components/onboardingmodal';
@@ -72,6 +73,9 @@ const Main = ({
 
   // Poll solar data if the toggle is enabled.
   useConditionalSolarDataPolling();
+
+  // Fetch data centers data as soon as the app is mounted
+  useRequestDataCenterFacilities()
 
   const { data: clientVersionData } = useSWR('/clientVersion', fetcher, {refreshInterval: CLIENT_VERSION_CHECK_INTERVAL})
   const clientVersion = clientVersionData && clientVersionData.version;

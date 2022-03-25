@@ -4,12 +4,26 @@
         background-size: cover;
     }
 
+    #sdia-logo {
+        background-image: url(../images/sdia-logo-dark.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
     .logo .image {
         display: inline-block;
         height: 21px;
-        width:139px;
+        width: 139px;
         margin-right: 4px;
-        margin-top:1.5px;
+        margin-top: 1.5px;
+    }
+
+    .sdia-logo .image {
+        display: inline-block;
+        height: 20px;
+        width: 50px;
+        margin-left: 4px;
+        margin-top: 1.5px;
     }
 
     @include respond-to('small') {

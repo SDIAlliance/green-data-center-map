@@ -1,0 +1,216 @@
+.data-center-facilities-compare-panel {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  box-sizing: border-box;
+  transition: transform 0.4s, box-shadow 0.4s, width 0.4s;
+
+  // .data-center-facilities-compare-panel__box:not(:last-of-type)
+  &__box:not(:last-of-type) {
+    margin-bottom: 1rem;
+  }
+
+  // .data-center-facilities-compare-panel__button
+  &__button {
+    width: 200px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 18px;
+    border: none;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    font-family: 'Euclid Triangle', 'Open Sans', sans-serif;
+
+    // .data-center-facilities-compare-panel__button:not(:disabled):hover
+    &:not(:disabled):hover {
+      cursor: pointer;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__close-mobile
+  &__close-mobile {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 1.5rem;
+    right: 2rem;
+    height: 2rem;
+    width: 2rem;
+    color: black;
+    border-radius: 4px;
+    background-color: $lighter-gray;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);
+    outline: 0;
+
+    @include respond-to('medium-up') {
+      display: none;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__content
+  &__content {
+    overflow: auto;
+    padding: 0 3rem 3rem;
+
+    @include respond-to('small') {
+      padding: 0 2rem 2rem;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__data-center-facilities-box
+  &__data-center-facilities-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    height: auto;
+    background-color: #fff;
+    border-radius: 0.3rem;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+
+    // .data-center-facilities-compare-panel__data-center-facilities-box:not(:first-of-type)
+    &:not(:first-of-type) {
+      margin-top: 1rem;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__empty-content-title
+  &__empty-content-title {
+    margin-left: 3rem;
+    margin-right: 3rem;
+
+    @include respond-to('small') {
+      margin: 2rem;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__headline
+  &__headline {
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1.25em;
+    margin-bottom: auto;
+  }
+
+  // .data-center-facilities-compare-panel__remove-data-center-facility
+  &__remove-data-center-facility {
+    cursor: pointer;
+    position: absolute;
+    top: 1.1rem;
+    right: 1rem;
+    color: black;
+    outline: 0;
+  }
+
+  // .data-center-facilities-compare-panel__row:not(:last-of-type)
+  &__row:not(:last-of-type) {
+    margin-bottom: 1rem;
+  }
+
+  // .data-center-facilities-compare-panel__subtext
+  &__subtext {
+    margin-top: 0.375rem;
+    margin-bottom: 0.375rem;
+    font-size: 0.85em;
+
+    // .data-center-facilities-compare-panel__subtext--uppercase
+    &--uppercase {
+      text-transform: uppercase;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__table
+  &__table {
+    text-align: left;
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 0.3rem;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  &__table-row {
+    & .data-center-facilities-compare-panel__table-column:first-of-type {
+      width: 200px;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__table-column
+  // .data-center-facilities-compare-panel__table-header
+  // .data-center-facilities-compare-panel__table-row
+  &__table-column,
+  &__table-header,
+  &__table-row {
+    font-size: 0.92em;
+    line-height: 1.25em;
+    padding: 1rem;
+    background: #fff;
+    border-bottom: 2px solid $lighter-gray;
+
+    // .data-center-facilities-compare-panel__table-row--bold,
+    // .data-center-facilities-compare-panel__table-header--bold,
+    // .data-center-facilities-compare-panel__table-column--bold
+    &--bold {
+      font-weight: 700;
+    }
+
+    // .data-center-facilities-compare-panel__table-row--uppercase,
+    // .data-center-facilities-compare-panel__table-header--uppercase,
+    // .data-center-facilities-compare-panel__table-column--uppercase
+    &--uppercase {
+      text-transform: uppercase;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__table-remove-data-center-facility
+  &__table-remove-data-center-facility {
+    display: flex;
+    align-items: center;
+  }
+
+  // .data-center-facilities-compare-panel__table-remove-data-center-facility-icon
+  &__table-remove-data-center-facility-icon {
+    margin-left: 1rem;
+    display: flex;
+
+    i {
+      font-size: 16px;
+    }
+
+    // .data-center-facilities-compare-panel__table-remove-data-center-facility-icon:hover
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  // .data-center-facilities-compare-panel__title
+  &__title {
+    margin-bottom: 3rem;
+
+    @include respond-to('small') {
+      margin-bottom: 2rem;
+      margin-top: 2rem;
+    }
+  }
+
+  // .data-center-facilities-compare-panel svg
+  & > svg {
+    display: block;
+  }
+
+  @include respond-to('medium-up') {
+    height: 100%; /* Should only be set on desktop */
+  }
+
+  @include respond-to('small') {
+    padding: 0;
+    position: relative;
+    width: 100%;
+  }
+}

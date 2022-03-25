@@ -13,14 +13,19 @@ const cookieGetBool = (key, defaultValue) => {
   return val === 'true';
 };
 
+const LEFT_PANEL_TAB_DATA_CENTER_FACILITIES = 'data-center-facilities';
+const LEFT_PANEL_TAB_ELECTRICITY_MAP = 'electricity-map';
+
 const initialApplicationState = {
   // Here we will store non-data specific state (to be sent in analytics and crash reporting)
+  allDataCenterFacilitiesToCompare: null,
   bundleHash: window.bundleHash,
   callerLocation: null,
   callerZone: null,
   clientType: window.isCordova ? 'mobileapp' : 'web',
   co2ColorbarValue: null,
   colorBlindModeEnabled: cookieGetBool('colorBlindModeEnabled', false),
+  dataCenterFacilityInfo: null,
   brightModeEnabled: cookieGetBool('brightModeEnabled', true),
   electricityMixMode: 'consumption',
   isCordova: window.isCordova,
@@ -29,13 +34,15 @@ const initialApplicationState = {
   // be stopped from propagating mouse move events to the map.
   // See https://github.com/visgl/react-map-gl/blob/master/docs/advanced/custom-components.md
   isHoveringExchange: false,
-  isLeftPanelCollapsed: false,
+  isDataCenterFacilitiesComparePanelCollapsed: true,
+  isDataCenterFacilityComparePanelComparisonOpen: false,
   isMovingMap: false,
   isLoadingMap: true,
   isMobile:
     (/android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i).test(navigator.userAgent),
   isProduction: isProduction(),
   isLocalhost: isLocalhost(),
+  leftPanelCurrentTab: LEFT_PANEL_TAB_ELECTRICITY_MAP,
   legendVisible: true,
   locale: window.locale,
   mapViewport: {
@@ -77,6 +84,11 @@ const applicationReducer = (state = initialApplicationState, action) => {
     default:
       return state;
   }
+};
+
+export {
+  LEFT_PANEL_TAB_DATA_CENTER_FACILITIES,
+  LEFT_PANEL_TAB_ELECTRICITY_MAP
 };
 
 export default combineReducers({

@@ -41,10 +41,12 @@ Object.entries(exchanges).forEach((entry) => {
 
 const initialDataState = {
   // Here we will store data items
+  dataCenterFacilities: [],
   grid: { zones, exchanges },
   hasConnectionWarning: false,
   hasInitializedGrid: false,
   histories: {},
+  isLoadingDataCenterFacilities: false,
   isLoadingHistories: false,
   isLoadingGrid: false,
   isLoadingSolar: false,
@@ -57,6 +59,41 @@ const initialDataState = {
 
 module.exports = (state = initialDataState, action) => {
   switch (action.type) {
+    case 'DATA_CENTERS_FETCH_REQUESTED': {
+      return { ...state, isLoadingDataCenterFacilities: true };
+    }
+
+    case 'DATA_CENTERS_FETCH_SUCCEEDED': {
+      return {
+        ...state,
+        isLoadingDataCenterFacilities: false,
+        dataCenterFacilities: Boolean(action) && Array.isArray(action.payload) ?
+          action.payload.map(dataCenterFacility => (
+            dataCenterFacility && {
+              ...dataCenterFacility,
+              consentToOpenData: dataCenterFacility.consent_to_open_data,
+              createdAt: dataCenterFacility.created_at,
+              energyInputRestEndpoint: dataCenterFacility.energy_input_rest_endpoint,
+              energyInputStreamEndpoint: dataCenterFacility.energy_input_stream_endpoint,
+              energyInputStreamTopic: dataCenterFacility.energy_input_stream_topic,
+              energyOutputRestEndpoint: dataCenterFacility.energy_output_rest_endpoint,
+              energyOutputStreamEndpoint: dataCenterFacility.energy_output_stream_endpoint,
+              energyOutputStreamTopic: dataCenterFacility.energy_output_stream_topic,
+              equipmentInventoryRestEndpoint: dataCenterFacility.equipment_inventory_rest_endpoint,
+              latitude: dataCenterFacility.geo_lat,
+              longitude: dataCenterFacility.geo_lon,
+              totalElectricalCapacity: dataCenterFacility.total_electrical_capacity,
+              updatedAt: dataCenterFacility.updated_at
+            }
+          )) :
+          null,
+      };
+    }
+
+    case 'DATA_CENTERS_FETCH_FAILED': {
+      return { ...state, isLoadingDataCenterFacilities: false };
+    }
+
     case 'GRID_DATA_FETCH_REQUESTED': {
       return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
     }

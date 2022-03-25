@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { debounce } from 'lodash';
@@ -15,6 +15,7 @@ import { useZonesWithColors } from '../hooks/map';
 import { useTrackEvent } from '../hooks/tracking';
 import { dispatchApplication } from '../store';
 
+import DataCenterFacilityTooltip from '../components/tooltips/data-center-facility-tooltip';
 import ZoneMap from '../components/zonemap';
 import MapLayer from '../components/maplayer';
 import MapCountryTooltip from '../components/tooltips/mapcountrytooltip';
@@ -22,9 +23,13 @@ import ExchangeLayer from '../components/layers/exchangelayer';
 import SolarLayer from '../components/layers/solarlayer';
 import WindLayer from '../components/layers/windlayer';
 
+import { LEFT_PANEL_TAB_DATA_CENTER_FACILITIES, LEFT_PANEL_TAB_ELECTRICITY_MAP } from '../reducers';
+
 const debouncedReleaseMoving = debounce(() => { dispatchApplication('isMovingMap', false); }, 200);
 
 export default () => {
+  const dataCenterFacilities = useSelector(state => state.data.dataCenterFacilities);
+  const currentDataCenterFacilitiesToCompare = useSelector(state => state.application.allDataCenterFacilitiesToCompare);
   const webGLSupported = useSelector(state => state.application.webGLSupported);
   const isHoveringExchange = useSelector(state => state.application.isHoveringExchange);
   const electricityMixMode = useSelector(state => state.application.electricityMixMode);
@@ -44,8 +49,10 @@ export default () => {
   const zoneId = getZoneId();
   const theme = useTheme();
 
+  const [dataCenterFacilitiesToCompare, setDataCenterFacilitiesToCompare] = useState([]);
   const [tooltipPosition, setTooltipPosition] = useState(null);
   const [tooltipZoneData, setTooltipZoneData] = useState(null);
+  const [tooltipDataCenterFacilityData, setTooltipDataCenterFacilityData] = useState(null);
 
   const handleMapLoaded = useMemo(
     () => () => {
@@ -115,10 +122,49 @@ export default () => {
     [history, location],
   );
 
+  const handleDataFacilityCenterClick = useMemo(
+    () => (data) => {
+      if (data) {
+        dispatchApplication('isDataCenterFacilitiesComparePanelComparisonOpen', false);
+        dispatchApplication('leftPanelCurrentTab', LEFT_PANEL_TAB_DATA_CENTER_FACILITIES);
+      }
+
+      // NOTE: This is commented so that we can add the same Data Center for comparison, as we only get one from the API response
+      // const dataCenterFacilityAlreadyExists = Boolean(dataCenterFacilitiesToCompare.find(entry => entry.dataCenterFacilityId === data.dataCenterFacilityId));
+      // if (!dataCenterFacilityAlreadyExists) {
+      //   setDataCenterFacilitiesToCompare(prevState => [...prevState, data]);
+      // }
+
+      setDataCenterFacilitiesToCompare(prevState => [...prevState, data]);
+    },
+    [],
+  );
+
+  const handleDataCenterFacilityMouseEnter = useMemo(
+    () => (data) => {
+      dispatchApplication(
+        'dataCenterFacilityInfo',
+         data
+      );
+      setTooltipDataCenterFacilityData(data);
+    },
+    [],
+  );
+
+  const handleDataCenterFacilityMouseLeave = useMemo(
+    () => () => {
+      dispatchApplication('dataCenterFacilityInfo', null);
+      setTooltipDataCenterFacilityData(null);
+    },
+    [],
+  );
+
   const handleZoneClick = useMemo(
     () => (id) => {
       trackEvent('countryClick');
-      dispatchApplication('isLeftPanelCollapsed', false);
+      dispatchApplication('isDataCenterFacilitiesComparePanelCollapsed', true);
+      dispatchApplication('leftPanelCurrentTab', LEFT_PANEL_TAB_ELECTRICITY_MAP);
+
       history.push({ pathname: `/zone/${id}`, search: location.search });
     },
     [trackEvent, history, location],
@@ -179,6 +225,18 @@ export default () => {
   const transitionDuration = isLoadingMap ? 0 : 300;
   const hoveringEnabled = !isHoveringExchange && !isMobile;
 
+  useEffect(() => {
+    if (dataCenterFacilitiesToCompare) {
+      dispatchApplication('allDataCenterFacilitiesToCompare', dataCenterFacilitiesToCompare);
+    }
+  }, [dataCenterFacilitiesToCompare])
+
+  useEffect(() => {
+    if (currentDataCenterFacilitiesToCompare) {
+      setDataCenterFacilitiesToCompare(currentDataCenterFacilitiesToCompare);
+    }
+  }, [currentDataCenterFacilitiesToCompare])
+
   return (
     <React.Fragment>
       <div id="webgl-error" className={`flash-message ${!webGLSupported ? 'active' : ''}`}>
@@ -193,7 +251,15 @@ export default () => {
           onClose={() => setTooltipZoneData(null)}
         />
       )}
+      {tooltipPosition && tooltipDataCenterFacilityData && hoveringEnabled && (
+        <DataCenterFacilityTooltip
+          dataCenterFacilityData={tooltipDataCenterFacilityData}
+          position={tooltipPosition}
+          onClose={() => setTooltipDataCenterFacilityData(null)}
+        />
+      )}
       <ZoneMap
+        dataCenterFacilities={dataCenterFacilities}
         hoveringEnabled={hoveringEnabled}
         onMapLoaded={handleMapLoaded}
         onMapError={handleMapError}
@@ -201,6 +267,9 @@ export default () => {
         onResize={handleResize}
         onSeaClick={handleSeaClick}
         onViewportChange={handleViewportChange}
+        onDataCenterFacilityClick={handleDataFacilityCenterClick}
+        onDataCenterFacilityMouseEnter={handleDataCenterFacilityMouseEnter}
+        onDataCenterFacilityMouseLeave={handleDataCenterFacilityMouseLeave}
         onZoneClick={handleZoneClick}
         onZoneMouseEnter={handleZoneMouseEnter}
         onZoneMouseLeave={handleZoneMouseLeave}

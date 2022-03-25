@@ -2,6 +2,7 @@
 @import "mixins";
 @import "base";
 
+@import "layout/data-center-facilities-compare-panel";
 @import "layout/header";
 @import "layout/footer";
 @import "layout/left-panel";
@@ -12,6 +13,7 @@
 @import "content/panel/time-slider";
 @import "content/panel/zone-list";
 
+@import "components/data-center-facility-tooltip";
 @import "components/faqs";
 @import "components/messaging";
 @import "components/modal";

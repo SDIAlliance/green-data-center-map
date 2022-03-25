@@ -46,7 +46,8 @@
     pointer-events: none;
 }
 
-#country-tooltip {
+#country-tooltip,
+#data-center-facilities-tooltip {
     .zone-name-header{
         margin-bottom: 5px;
     }
@@ -58,7 +59,8 @@
         margin-left: 1.25rem;
     }
 
-    &.country-tooltip-visible  {
+    &.country-tooltip-visible,
+    &.data-center-facilities-tooltip-visible {
         @include respond-to('small') {
             display: none;
         }
