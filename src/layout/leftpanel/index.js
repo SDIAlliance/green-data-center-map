@@ -166,7 +166,7 @@ const LeftPanel = ({ isDataCenterFacilitiesComparePanelComparisonOpen, currentTa
       <LeftPanelCollapseButton
         ref={dataCenterFacilitiesComparisonTabToggle}
         id="left-panel-collapse-button"
-        className={`data-center-facilities ${collapsedClass}`}
+        className={`data-center-facilities-collapse-button ${collapsedClass}`}
         role="button"
         tabIndex="0"
         onClick={handleDataCenterFacilitiesTogglePanelButtonClick}
