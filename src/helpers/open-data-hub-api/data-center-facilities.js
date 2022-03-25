@@ -1,26 +1,11 @@
 import * as request from 'd3-request';
 
-import { isLocalhost } from '../environment';
 import thirdPartyServices from '../../services/thirdparty';
 
-function isRemoteParam() {
-  return (new URLSearchParams(window.location.search)).get('remote') === 'true';
-}
-
-// Use local endpoint only if ALL of the following conditions are true:
-// 1. The app is running on localhost
-// 2. The `remote` search param hasn't been explicitly set to true
-// 3. Document domain has a non-empty value
-function isUsingLocalEndpoint() {
-  return isLocalhost() && !isRemoteParam() && document.domain !== '';
-}
-
-export function getEndpoint() {
-  return isUsingLocalEndpoint() ? 'https://stoplight.io/mocks/sdia/odh-api-spec/33382459' : '';
-}
+const apiEndpoint = 'https://stoplight.io/mocks/sdia/odh-api-spec/33382459';
 
 export function fetchDataCenterFacilitiesApiRequest(path) {
-  const url = getEndpoint() + path;
+  const url = `${apiEndpoint}${path}`;
 
   return new Promise((resolve, reject) => {
     request.json(url)
