@@ -80,8 +80,6 @@ module.exports = (state = initialDataState, action) => {
               energyOutputStreamEndpoint: dataCenterFacility.energy_output_stream_endpoint,
               energyOutputStreamTopic: dataCenterFacility.energy_output_stream_topic,
               equipmentInventoryRestEndpoint: dataCenterFacility.equipment_inventory_rest_endpoint,
-              lat: dataCenterFacility.geo_lat,
-              lng: dataCenterFacility.geo_lon,
               totalElectricalCapacity: dataCenterFacility.total_electrical_capacity,
               updatedAt: dataCenterFacility.updated_at
             }
