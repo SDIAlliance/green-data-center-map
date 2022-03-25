@@ -69,7 +69,7 @@ module.exports = (state = initialDataState, action) => {
         isLoadingDataCenterFacilities: false,
         dataCenterFacilities: Boolean(action) && Array.isArray(action.payload) ?
           action.payload.map(dataCenterFacility => (
-            Boolean(dataCenterFacility) && {
+            dataCenterFacility && {
               ...dataCenterFacility,
               consentToOpenData: dataCenterFacility.consent_to_open_data,
               createdAt: dataCenterFacility.created_at,
