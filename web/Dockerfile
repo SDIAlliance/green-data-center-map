@@ -1,19 +1,17 @@
 FROM node:12.22
-WORKDIR /home/src/electricitymap/contrib/web
+WORKDIR /
 
 # Install dependencies
 RUN apt-get update && apt-get install -y jq unzip
-ADD web/package.json ./package.json
-ADD web/yarn.lock ./yarn.lock
+RUN cp -a web ./
 RUN yarn install --frozen-lockfile
 
-
-ADD web/src/world.json ./src/world.json 
+ADD web/src/world.json ./src/world.json
 ARG ELECTRICITYMAP_PUBLIC_TOKEN
 
 # Build
 # (note: this will override the world.json that was previously created)
-ADD config /home/src/electricitymap/contrib/config
+ADD config /config
 ADD web ./
 RUN yarn lint
 RUN yarn build-release
