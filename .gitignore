@@ -104,8 +104,25 @@ dist
 .tern-port
 
 # Electricitymap-contrib
-build
-zonegeometries.json
+*.pyc
+*.env
+web/public/dist
+web/node_modules
+.ipynb_checkpoints/
+*.pyproj
+*.sln
+*.suo
+*.user
+/.vs/config
+/App_Data/PublishProfiles
+*.publishproj
+.DS_Store
+/.vs
+/.venv
+Thumbs.db
+mobileapp/*.zip
+dist
 
-## Netbeans folder
-nbproject
+## Pycharm IDE
+.idea
+.vscode
