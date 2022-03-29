@@ -220,6 +220,6 @@ if (isProduction) {
 }
 
 // Start the application
-server.listen(9000, () => {
-  console.log(`Listening on *:${9000}`);
+server.listen(process.env.PORT, () => {
+  console.log(`Listening on *:${process.env.PORT}`);
 });
