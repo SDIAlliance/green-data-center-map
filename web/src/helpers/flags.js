@@ -3,7 +3,7 @@
 
 var exports = module.exports = {};
 
-var zones = require('../../electricitymap-contrib_config/zones.json');
+var zones = require('../../../config/zones.json');
 
 var { DEFAULT_FLAG_SIZE } = require('../helpers/constants');
 

@@ -3,7 +3,7 @@ const path = require('path');
 
 const { getJSON } = require('./utilities');
 
-const PATH_ZONES_JSON = path.resolve(__dirname, '../electricitymap-contrib_config/zones.json');
+const PATH_ZONES_JSON = path.resolve(__dirname, '../../config/zones.json');
 
 const getZonesJson = () => getJSON(PATH_ZONES_JSON, 'utf8');
 

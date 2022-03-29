@@ -4,8 +4,8 @@ const { modeOrder } = require('../helpers/constants');
 const constructTopos = require('../helpers/topos');
 const translation = require('../helpers/translation');
 
-const exchangesConfig = require('../../electricitymap-contrib_config/exchanges.json');
-const zonesConfig = require('../../electricitymap-contrib_config/zones.json');
+const exchangesConfig = require('../../../config/exchanges.json');
+const zonesConfig = require('../../../config/zones.json');
 
 // ** Prepare initial zone data
 const zones = constructTopos();
