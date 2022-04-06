@@ -9,7 +9,7 @@ const SDIAlogo = resolvePath('images/sdia-logo-dark.png');
 const headerLinks = [
   {
     label: 'Open Source',
-    href: 'https://electricitymap.org/open-source?utm_source=app.electricitymap.org&utm_medium=referral',
+    href: 'https://greendatacentermap.com/open-source?utm_source=app.greendatacentermap.com&utm_medium=referral',
   }
 ];
 

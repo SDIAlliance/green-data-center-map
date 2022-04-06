@@ -58,13 +58,13 @@ export default () => (
         { /* Facebook share */}
         <div
           className="fb-share-button"
-          data-href="https://app.electricitymap.org/"
+          data-href="https://app.greendatacentermap.com/"
           data-layout="button_count"
         />
         { /* Twitter share */}
         <a
           className="twitter-share-button"
-          data-url="https://app.electricitymap.org"
+          data-url="https://app.greendatacentermap.com"
           data-via="electricitymap"
           data-lang={locale}
         />

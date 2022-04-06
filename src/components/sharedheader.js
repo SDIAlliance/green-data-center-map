@@ -159,7 +159,7 @@ const SharedHeader = ({
   SDIAlogo
 }) => (
   <Wrapper inverted={inverted} collapsed={collapsed}>
-    <a href="https://app.electricitymap.org/map">
+    <a href="https://app.greendatacentermap.com/map">
       <Logo src={logo} alt="logo" />
     </a>
     <a href="https://sdialliance.org/">

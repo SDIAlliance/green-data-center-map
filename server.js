@@ -58,7 +58,7 @@ app.use(i18n.init);
 // Populate using
 // https://developers.facebook.com/docs/messenger-platform/messenger-profile/supported-locales/
 // and re-crawl using
-// http POST https://graph.facebook.com\?id\=https://www.electricitymap.org\&amp\;scrape\=true\&amp\;locale\=\en_US,fr_FR,it_IT.......
+// http POST https://graph.facebook.com\?id\=https://www.greendatacentermap.com\&amp\;scrape\=true\&amp\;locale\=\en_US,fr_FR,it_IT.......
 
 /*
 Note: Translation function should be removed and
@@ -109,8 +109,8 @@ app.get('/translationstatus', (req, res) => res.json(getTranslationStatusJSON(lo
 app.get('/translationstatus/:language', (req, res) => res.json(getSingleTranslationStatusJSON(req.params.language)));
 
 // API
-app.get('/v1/*', (req, res) => res.redirect(301, `https://api.electricitymap.org${req.originalUrl}`));
-app.get('/v2/*', (req, res) => res.redirect(301, `https://api.electricitymap.org${req.originalUrl}`));
+app.get('/v1/*', (req, res) => res.redirect(301, `https://api.greendatacentermap.com${req.originalUrl}`));
+app.get('/v2/*', (req, res) => res.redirect(301, `https://api.greendatacentermap.com${req.originalUrl}`));
 
 // Source maps
 app.all('/dist/*.map', (req, res, next) => {
@@ -131,7 +131,7 @@ app.use(express.static(STATIC_PATH, { etag: true, maxAge: isProduction ? '24h' :
 
 // App routes (managed by React Router)
 app.use('/', (req, res) => {
-  const isNonAppDomain = req.get('host') !== 'app.electricitymap.org';
+  const isNonAppDomain = req.get('host') !== 'app.greendatacentermap.com';
   const isStaging = req.get('host').includes('staging');
   const isFacebookRobot = (req.headers['user-agent'] || '').indexOf('facebookexternalhit') !== -1;
 
@@ -139,7 +139,7 @@ app.use('/', (req, res) => {
   // redirect everyone except the Facebook crawler,
   // else, we will lose all likes
   if (!isStaging && isProduction && isNonAppDomain && !isFacebookRobot) {
-    res.redirect(301, `https://app.electricitymap.org${req.originalUrl}`);
+    res.redirect(301, `https://app.greendatacentermap.com${req.originalUrl}`);
   } else {
     // Set locale if facebook requests it
     if (req.query.fb_locale) {
@@ -149,7 +149,7 @@ app.use('/', (req, res) => {
       res.setLocale(lr[0]);
     }
     const { locale } = res;
-    let canonicalUrl = `https://app.electricitymap.org${req.baseUrl + req.path}`;
+    let canonicalUrl = `https://app.greendatacentermap.com${req.baseUrl + req.path}`;
     if(req.query.lang) {
       canonicalUrl += `?lang=${req.query.lang}`;
     }
@@ -168,7 +168,7 @@ app.use('/', (req, res) => {
       }
       if (!authorized) {
         res.statusCode = 401;
-        res.setHeader('WWW-Authenticate', 'Basic realm="Premium access to electricitymap.org"');
+        res.setHeader('WWW-Authenticate', 'Basic realm="Premium access to greendatacentermap.com"');
         res.end('Access denied');
         return;
       }
@@ -196,7 +196,7 @@ app.use('/', (req, res) => {
         : relativePath =>
           // Note we here point to static hosting in order to make
           // sure we can serve older bundle versions
-          `https://static.electricitymap.org/public_web/${relativePath}`,
+          `https://static.greendatacentermap.com/public_web/${relativePath}`,
       canonicalUrl,
       locale,
       locales: { en: localeConfigs.en, [locale]: localeConfigs[locale] },
@@ -216,7 +216,7 @@ app.use('/', (req, res) => {
 if (isProduction) {
   app.get('/*', (req, res) =>
     // Redirect all requests except root to static
-    res.redirect(`https://static.electricitymap.org/public_web${req.originalUrl}`));
+    res.redirect(`https://static.greendatacentermap.com/public_web${req.originalUrl}`));
 }
 
 // Start the application

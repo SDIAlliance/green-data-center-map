@@ -1,5 +1,5 @@
 # green-data-center-map
-Our fork of the electricityMap.org to display data centers &amp; the carbon intensity of the grid they are located in.
+Our fork of the greendatacentermap.com to display data centers &amp; the carbon intensity of the grid they are located in.
 
 *This file should host other explanations. Yours are welcome.*
 ## Local development
