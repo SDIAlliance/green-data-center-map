@@ -128,7 +128,7 @@ const Main = ({
               <a
                 href=""
                 onClick={(e) => {
-                  dispatch({ type: 'GRID_DATA_FETCH_REQUESTED', payload: { datetime } });
+                  dispatch({ type: 'FETCH_GRID_ZONES_REQUESTED', payload: { datetime } });
                   e.preventDefault();
                 }}
               >

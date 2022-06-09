@@ -94,11 +94,11 @@ module.exports = (state = initialDataState, action) => {
       return { ...state, isLoadingDataCenterFacilities: false };
     }
 
-    case 'GRID_DATA_FETCH_REQUESTED': {
+    case 'FETCH_GRID_ZONES_REQUESTED': {
       return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
     }
 
-    case 'GRID_DATA_FETCH_SUCCEEDED': {
+    case 'FETCH_GRID_ZONES_SUCCEEDED': {
       // Create new grid object
       const newGrid = Object.assign({}, {
         zones: Object.assign({}, state.grid.zones),
@@ -208,7 +208,7 @@ module.exports = (state = initialDataState, action) => {
       return newState;
     }
 
-    case 'GRID_DATA_FETCH_FAILED': {
+    case 'FETCH_GRID_ZONES_FAILED': {
       // TODO: Implement error handling
       return { ...state, hasConnectionWarning: true, isLoadingGrid: false };
     }

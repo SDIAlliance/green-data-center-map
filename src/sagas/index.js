@@ -32,7 +32,7 @@ function* fetchZoneHistory(action) {
   }
 }
 
-function* fetchGridData(action) {
+function* fetchGridZones(action) {
   const { features } = action.payload || {};
   let endpoint = '/v3/state';
 
@@ -46,9 +46,9 @@ function* fetchGridData(action) {
     yield put({ type: 'TRACK_EVENT', payload: { eventName: 'pageview' } });
     yield put({ type: 'APPLICATION_STATE_UPDATE', key: 'callerLocation', value: payload.callerLocation });
     yield put({ type: 'APPLICATION_STATE_UPDATE', key: 'callerZone', value: payload.callerZone });
-    yield put({ type: 'GRID_DATA_FETCH_SUCCEEDED', payload });
+    yield put({ type: 'FETCH_GRID_ZONES_SUCCEEDED', payload });
   } catch (err) {
-    yield put({ type: 'GRID_DATA_FETCH_FAILED' });
+    yield put({ type: 'FETCH_GRID_ZONES_FAILED' });
     handleRequestError(err);
   }
 }
@@ -116,7 +116,7 @@ function* fetchDataCenterFacilities() {
 export default function* () {
   // Data fetching
   yield takeLatest('DATA_CENTERS_FETCH_REQUESTED', fetchDataCenterFacilities)
-  yield takeLatest('GRID_DATA_FETCH_REQUESTED', fetchGridData);
+  yield takeLatest('FETCH_GRID_ZONES_REQUESTED', fetchGridZones);
   yield takeLatest('WIND_DATA_FETCH_REQUESTED', fetchWindData);
   yield takeLatest('SOLAR_DATA_FETCH_REQUESTED', fetchSolarData);
   yield takeLatest('ZONE_HISTORY_FETCH_REQUESTED', fetchZoneHistory);
