@@ -1,4 +1,5 @@
 import {
+  all,
   call,
   put,
   select,
@@ -32,20 +33,30 @@ function* fetchZoneHistory(action) {
   }
 }
 
-function* fetchGridZones(action) {
-  const { features } = action.payload || {};
-  let endpoint = '/v3/state';
-
-  if (features.length > 0) {
-    endpoint += features.map(f => `&${f}=true`);
+function* fetchZoneCarbonIntensity(endpoint) {
+  try {
+    const payload = yield call(protectedJsonRequest, endpoint);
+    yield put({ type: 'ZONE_CARBON_INTENSITY_SUCCEEDED', payload });
+  } catch (err) {
+    yield put({ type: 'ZONE_CARBON_INTENSITY_FAILED' });
+    handleRequestError(err);
   }
+}
 
+function* fetchGridZones() {
+  const endpoint = '/v3/zones';
 
   try {
     const payload = yield call(protectedJsonRequest, endpoint);
     yield put({ type: 'TRACK_EVENT', payload: { eventName: 'pageview' } });
     yield put({ type: 'APPLICATION_STATE_UPDATE', key: 'callerLocation', value: payload.callerLocation });
     yield put({ type: 'APPLICATION_STATE_UPDATE', key: 'callerZone', value: payload.callerZone });
+
+    const zoneEndpoints = Object.keys(payload).map(zoneId => `/v3/carbon-intensity/latest?zone=${zoneId}`);
+
+    if (zoneEndpoints.length) {
+      yield all(zoneEndpoints.map(zoneEndpoint => call(fetchZoneCarbonIntensity, zoneEndpoint)))
+    }
     yield put({ type: 'FETCH_GRID_ZONES_SUCCEEDED', payload });
   } catch (err) {
     yield put({ type: 'FETCH_GRID_ZONES_FAILED' });
@@ -119,6 +130,7 @@ export default function* () {
   yield takeLatest('FETCH_GRID_ZONES_REQUESTED', fetchGridZones);
   yield takeLatest('WIND_DATA_FETCH_REQUESTED', fetchWindData);
   yield takeLatest('SOLAR_DATA_FETCH_REQUESTED', fetchSolarData);
+  yield takeLatest('ZONE_CARBON_INTENSITY_REQUESTED', fetchZoneCarbonIntensity);
   yield takeLatest('ZONE_HISTORY_FETCH_REQUESTED', fetchZoneHistory);
   // Analytics
   yield takeLatest('TRACK_EVENT', trackEvent);

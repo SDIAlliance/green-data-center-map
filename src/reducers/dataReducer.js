@@ -122,30 +122,31 @@ module.exports = (state = initialDataState, action) => {
       // Set date
       newGrid.datetime = action.payload.datetime;
 
+      // Not needed for current API data
       // Reset all data we want to update (for instance, not maxCapacity)
-      Object.keys(newGrid.zones).forEach((key) => {
-        const zone = Object.assign({}, newGrid.zones[key]);
-        zone.co2intensity = undefined;
-        zone.fossilFuelRatio = undefined;
-        zone.fossilFuelRatioProduction = undefined;
-        zone.renewableRatio = undefined;
-        zone.renewableRatioProduction = undefined;
-        zone.exchange = {};
-        zone.production = {};
-        zone.productionCo2Intensities = {};
-        zone.productionCo2IntensitySources = {};
-        zone.dischargeCo2Intensities = {};
-        zone.dischargeCo2IntensitySources = {};
-        zone.storage = {};
-        zone.source = undefined;
-        newGrid.zones[key] = zone;
-      });
-      Object.keys(newGrid.exchanges).forEach((key) => {
-        newGrid.exchanges[key].netFlow = undefined;
-      });
+      // Object.keys(newGrid.zones).forEach((key) => {
+      //   const zone = Object.assign({}, newGrid.zones[key]);
+      //   zone.co2intensity = undefined;
+      //   zone.fossilFuelRatio = undefined;
+      //   zone.fossilFuelRatioProduction = undefined;
+      //   zone.renewableRatio = undefined;
+      //   zone.renewableRatioProduction = undefined;
+      //   zone.exchange = {};
+      //   zone.production = {};
+      //   zone.productionCo2Intensities = {};
+      //   zone.productionCo2IntensitySources = {};
+      //   zone.dischargeCo2Intensities = {};
+      //   zone.dischargeCo2IntensitySources = {};
+      //   zone.storage = {};
+      //   zone.source = undefined;
+      //   newGrid.zones[key] = zone;
+      // });
+      // Object.keys(newGrid.exchanges).forEach((key) => {
+      //   newGrid.exchanges[key].netFlow = undefined;
+      // });
 
       // Populate with realtime country data
-      Object.entries(action.payload.countries).forEach((entry) => {
+      Object.entries(action.payload).forEach((entry) => {
         const [key, value] = entry;
         const zone = newGrid.zones[key];
         if (!zone) {
@@ -158,8 +159,9 @@ module.exports = (state = initialDataState, action) => {
           // to be updated (like maxCapacity)
           zone[k] = value[k];
         });
+        // Date is now set in ZONE_CARBON_INTENSITY_SUCCEEDED
         // Set date
-        zone.datetime = action.payload.datetime;
+        // zone.datetime = action.payload.datetime;
 
         const hasNoData = !zone.production || Object.values(zone.production).every(v => v === null);
         if (hasNoData) {
@@ -189,19 +191,20 @@ module.exports = (state = initialDataState, action) => {
         });
       });
 
+      // Prevent error message showing for data that we don't use right now
       // Populate exchange pairs for exchange layer
-      Object.entries(action.payload.exchanges).forEach((entry) => {
-        const [key, value] = entry;
-        const exchange = newGrid.exchanges[key];
-        if (!exchange || !exchange.lonlat) {
-          console.warn(`Missing exchange configuration for ${key}`);
-          return;
-        }
-        // Assign all data
-        Object.keys(value).forEach((k) => {
-          exchange[k] = value[k];
-        });
-      });
+      // Object.entries(action.payload.exchanges).forEach((entry) => {
+      //   const [key, value] = entry;
+      //   const exchange = newGrid.exchanges[key];
+      //   if (!exchange || !exchange.lonlat) {
+      //     console.warn(`Missing exchange configuration for ${key}`);
+      //     return;
+      //   }
+      //   // Assign all data
+      //   Object.keys(value).forEach((k) => {
+      //     exchange[k] = value[k];
+      //   });
+      // });
 
       newState.hasInitializedGrid = true;
       newState.isLoadingGrid = false;
@@ -211,6 +214,33 @@ module.exports = (state = initialDataState, action) => {
     case 'FETCH_GRID_ZONES_FAILED': {
       // TODO: Implement error handling
       return { ...state, hasConnectionWarning: true, isLoadingGrid: false };
+    }
+
+    case 'ZONE_CARBON_INTENSITY_REQUESTED': {
+      return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
+    }
+
+    case 'ZONE_CARBON_INTENSITY_SUCCEEDED': {
+      return {
+        ...state,
+        isLoadingGrid: false,
+        grid: {
+          ...state.grid,
+          zones: {
+            ...state.grid.zones,
+            [action.payload.zone]: {
+              ...state.grid.zones[action.payload.zone],
+              co2intensity: action.payload.carbonIntensity,
+              datetime: action.payload.datetime
+            }
+          }
+        }
+      }
+    }
+
+    case 'ZONE_CARBON_INTENSITY_FAILED': {
+      // TODO: Implement error handling
+      return { ...state, isLoadingGrid: false };
     }
 
     case 'ZONE_HISTORY_FETCH_REQUESTED': {
