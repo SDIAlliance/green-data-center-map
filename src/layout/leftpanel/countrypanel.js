@@ -193,6 +193,9 @@ const CountryPanel = ({
   const location = useLocation();
   const { zoneId } = useParams();
 
+  // Get current zone carbon intensity from store
+  const currentZoneData = useSelector((state) => state.data.grid.zones[zoneId]);
+
   const data = useCurrentZoneData() || {};
 
   const parentPage = {
@@ -224,7 +227,8 @@ const CountryPanel = ({
   const { hasData, disclaimer, estimationMethod } = data;
   const isDataEstimated = !isNil(estimationMethod);
 
-  const datetime = data.stateDatetime || data.datetime;
+  const datetime = currentZoneData.datetime || data.stateDatetime || data.datetime;
+  const zoneCarbonIntensityData = currentZoneData.co2intensity;
   const co2Intensity = electricityMixMode === 'consumption'
     ? data.co2intensity
     : data.co2intensityProduction;
@@ -266,6 +270,13 @@ const CountryPanel = ({
             </CountryNameTimeTable>
           </CountryNameTime>
         </div>
+
+        {/* Show carbon intensity only */}
+        {Boolean(zoneCarbonIntensityData) && (
+          <CountryTableHeaderInner>
+            <CarbonIntensitySquare value={zoneCarbonIntensityData || co2Intensity} withSubtext />
+          </CountryTableHeaderInner>
+        )}
 
         {hasData && (
           <React.Fragment>
