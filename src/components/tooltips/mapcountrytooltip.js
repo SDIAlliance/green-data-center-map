@@ -44,20 +44,26 @@ const TooltipContent = React.memo(
     return (
       <div className="zone-details">
         <CountryTableHeaderInner>
-          <CarbonIntensitySquare value={co2intensity} />
-          <div className="country-col country-lowcarbon-wrap">
-            <div id="tooltip-country-lowcarbon-gauge" className="country-gauge-wrap">
-              <CircularGauge percentage={fossilFuelPercentage} />
+          {Boolean(co2intensity) && (
+            <CarbonIntensitySquare value={co2intensity} />
+          )}
+          {Boolean(fossilFuelPercentage) && (
+            <div className="country-col country-lowcarbon-wrap">
+              <div id="tooltip-country-lowcarbon-gauge" className="country-gauge-wrap">
+                <CircularGauge percentage={fossilFuelPercentage} />
+              </div>
+              <div className="country-col-headline">{__('country-panel.lowcarbon')}</div>
+              <div className="country-col-subtext" />
             </div>
-            <div className="country-col-headline">{__('country-panel.lowcarbon')}</div>
-            <div className="country-col-subtext" />
-          </div>
-          <div className="country-col country-renewable-wrap">
-            <div id="tooltip-country-renewable-gauge" className="country-gauge-wrap">
-              <CircularGauge percentage={renewablePercentage} />
+          )}
+          {Boolean(renewablePercentage) && (
+             <div className="country-col country-renewable-wrap">
+              <div id="tooltip-country-renewable-gauge" className="country-gauge-wrap">
+                <CircularGauge percentage={renewablePercentage} />
+              </div>
+              <div className="country-col-headline">{__('country-panel.renewable')}</div>
             </div>
-            <div className="country-col-headline">{__('country-panel.renewable')}</div>
-          </div>
+          )}
         </CountryTableHeaderInner>
       </div>
     );
