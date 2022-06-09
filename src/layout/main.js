@@ -26,10 +26,12 @@ import {
   useConditionalSolarDataPolling,
   useRequestDataCenterFacilities
 } from '../hooks/fetch';
-import { dispatchApplication } from '../store';
+// Not used right now
+// import { dispatchApplication } from '../store';
 import OnboardingModal from '../components/onboardingmodal';
 import LoadingOverlay from '../components/loadingoverlay';
-import Toggle from '../components/toggle';
+// Not used right now
+// import Toggle from '../components/toggle';
 import useSWR from 'swr';
 import ErrorBoundary from '../components/errorboundary';
 
@@ -53,7 +55,8 @@ const MapContainer = styled.div`
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 const Main = ({
-  electricityMixMode,
+  // Not used right now
+  // electricityMixMode,
   hasConnectionWarning,
 }) => {
   const dispatch = useDispatch();
@@ -106,7 +109,8 @@ const Main = ({
             <MapContainer pathname={location.pathname} id="map-container">
               <Map />
               <Legend />
-              <div className="controls-container">
+              {/* Not used right now */}
+              {/* <div className="controls-container">
                 <Toggle
                   infoHTML={__('tooltips.cpinfo')}
                   onChange={value => dispatchApplication('electricityMixMode', value)}
@@ -116,7 +120,7 @@ const Main = ({
                   ]}
                   value={electricityMixMode}
                 />
-              </div>
+              </div> */}
               <LayerButtons />
             </MapContainer>
           </ErrorBoundary>

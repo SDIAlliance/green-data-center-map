@@ -94,7 +94,9 @@
 /* override mapbox styling */
 .mapboxgl-zoom-controls {
     right: 16px !important;
-    top: 69px !important;
+    top: 18px !important;
+    // Value when default layers buttons are present
+    // top: 69px !important;
     transition: box-shadow .4s;
     user-select: none;
 
