@@ -1,40 +1,46 @@
 import * as request from 'd3-request';
 import { sha256 } from 'js-sha256';
-import Cookies from 'js-cookie';
 
-import { isLocalhost } from './environment';
+// Not necessary as we already connected to a real API
+// import { isLocalhost } from './environment';
 import thirdPartyServices from '../services/thirdparty';
 
-function isRemoteParam() {
-  return (new URLSearchParams(window.location.search)).get('remote') === 'true';
-}
+// Not necessary as we already connected to a real API
+// function isRemoteParam() {
+//   return (new URLSearchParams(window.location.search)).get('remote') === 'true';
+// }
 
+// Not necessary as we already connected to a real API
 // Use local endpoint only if ALL of the following conditions are true:
 // 1. The app is running on localhost
 // 2. The `remote` search param hasn't been explicitly set to true
 // 3. Document domain has a non-empty value
-function isUsingLocalEndpoint() {
-  return isLocalhost() && !isRemoteParam() && document.domain !== '';
-}
+// function isUsingLocalEndpoint() {
+//   return isLocalhost() && !isRemoteParam() && document.domain !== '';
+// }
 
 export function getEndpoint() {
-  return isUsingLocalEndpoint() ? 'http://localhost:8001' : 'https://app-backend.greendatacentermap.com';
+  // return isUsingLocalEndpoint() ? 'http://localhost:8001' : 'https://app-backend.greendatacentermap.com';
+
+  return 'https://api.electricitymap.org';
 }
 
 export function protectedJsonRequest(path) {
+  // Not necessary as we already connected to a real API
+  // const token = isUsingLocalEndpoint() ? 'development' : ELECTRICITYMAP_PUBLIC_TOKEN;
   const url = getEndpoint() + path;
-  const token = isUsingLocalEndpoint() ? 'development' : ELECTRICITYMAP_PUBLIC_TOKEN;
   const timestamp = new Date().getTime();
+  const token = process.env.ELECTRICITYMAP_TOKEN;
 
   return new Promise((resolve, reject) => {
     request.json(url)
-      .header('electricitymap-token', Cookies.get('electricitymap-token'))
+      .header('auth-token', token)
       .header('x-request-timestamp', timestamp)
-      .header('x-signature', sha256(token + path + timestamp))
+      .header('x-signature', sha256(`${token}${path}${timestamp}`))
       .get(null, (err, res) => {
         if (err) {
           reject(err);
-        } else if (!res || !res.data) {
+        } else if (!res) {
           const errorToReturn = new Error(`Empty response received for ${url}`);
           // Treat as a 404
           errorToReturn.target = {
@@ -43,7 +49,7 @@ export function protectedJsonRequest(path) {
           };
           reject(errorToReturn);
         } else {
-          resolve(res.data);
+          resolve(res);
         }
       });
   });
