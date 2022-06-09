@@ -322,7 +322,7 @@ const CountryPanel = ({
       </div>
 
       <CountryPanelWrap>
-        {hasData ? (
+        {hasData && (
           <React.Fragment>
             <BySource>
               {__('country-panel.bysource')}
@@ -391,7 +391,8 @@ const CountryPanel = ({
               <ContributorList />
             </div>
           </React.Fragment>
-        ) : (
+        )}
+        {!hasData && !zoneCarbonIntensityData && (
           <div className="zone-details-no-parser-message">
             <span dangerouslySetInnerHTML={{ __html: __('country-panel.noParserInfo', 'https://github.com/tmrowco/electricitymap-contrib/wiki/Getting-started') }} />
           </div>
