@@ -59,6 +59,33 @@ const initialDataState = {
 
 module.exports = (state = initialDataState, action) => {
   switch (action.type) {
+    case 'CARBON_INTENSITY_FETCH_REQUESTED': {
+      return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
+    }
+
+    case 'CARBON_INTENSITY_FETCH_SUCCEEDED': {
+      return {
+        ...state,
+        isLoadingGrid: false,
+        grid: {
+          ...state.grid,
+          zones: {
+            ...state.grid.zones,
+            [action.payload.zone]: {
+              ...state.grid.zones[action.payload.zone],
+              co2intensity: action.payload.carbonIntensity,
+              datetime: action.payload.datetime
+            }
+          }
+        }
+      }
+    }
+
+    case 'CARBON_INTENSITY_FETCH_FAILED': {
+      // TODO: Implement error handling
+      return { ...state, isLoadingGrid: false };
+    }
+
     case 'DATA_CENTERS_FETCH_REQUESTED': {
       return { ...state, isLoadingDataCenterFacilities: true };
     }
@@ -94,11 +121,11 @@ module.exports = (state = initialDataState, action) => {
       return { ...state, isLoadingDataCenterFacilities: false };
     }
 
-    case 'FETCH_GRID_ZONES_REQUESTED': {
+    case 'GRID_ZONES_FETCH_REQUESTED': {
       return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
     }
 
-    case 'FETCH_GRID_ZONES_SUCCEEDED': {
+    case 'GRID_ZONES_FETCH_SUCCEEDED': {
       // Create new grid object
       const newGrid = Object.assign({}, {
         zones: Object.assign({}, state.grid.zones),
@@ -159,7 +186,7 @@ module.exports = (state = initialDataState, action) => {
           // to be updated (like maxCapacity)
           zone[k] = value[k];
         });
-        // Date is now set in ZONE_CARBON_INTENSITY_SUCCEEDED
+        // Date is now set in CARBON_INTENSITY_FETCH_SUCCEEDED
         // Set date
         // zone.datetime = action.payload.datetime;
 
@@ -211,87 +238,61 @@ module.exports = (state = initialDataState, action) => {
       return newState;
     }
 
-    case 'FETCH_GRID_ZONES_FAILED': {
+    case 'GRID_ZONES_FETCH_FAILED': {
       // TODO: Implement error handling
       return { ...state, hasConnectionWarning: true, isLoadingGrid: false };
     }
 
-    case 'ZONE_CARBON_INTENSITY_REQUESTED': {
-      return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
-    }
+    // Not used right now
+    // case 'ZONE_HISTORY_FETCH_REQUESTED': {
+    //   return { ...state, isLoadingHistories: true };
+    // }
 
-    case 'ZONE_CARBON_INTENSITY_SUCCEEDED': {
-      return {
-        ...state,
-        isLoadingGrid: false,
-        grid: {
-          ...state.grid,
-          zones: {
-            ...state.grid.zones,
-            [action.payload.zone]: {
-              ...state.grid.zones[action.payload.zone],
-              co2intensity: action.payload.carbonIntensity,
-              datetime: action.payload.datetime
-            }
-          }
-        }
-      }
-    }
+    // case 'ZONE_HISTORY_FETCH_SUCCEEDED': {
+    //   return {
+    //     ...state,
+    //     isLoadingHistories: false,
+    //     histories: {
+    //       ...state.histories,
+    //       [action.zoneId]: action.payload.map(datapoint => ({
+    //         ...datapoint,
+    //         hasParser: true,
+    //         hasData: true
+    //       })),
+    //     },
+    //   };
+    // }
 
-    case 'ZONE_CARBON_INTENSITY_FAILED': {
-      // TODO: Implement error handling
-      return { ...state, isLoadingGrid: false };
-    }
+    // case 'ZONE_HISTORY_FETCH_FAILED': {
+    //   // TODO: Implement error handling
+    //   return { ...state, isLoadingHistories: false };
+    // }
 
-    case 'ZONE_HISTORY_FETCH_REQUESTED': {
-      return { ...state, isLoadingHistories: true };
-    }
+    // case 'SOLAR_DATA_FETCH_REQUESTED': {
+    //   return { ...state, isLoadingSolar: true, solarDataError: null };
+    // }
 
-    case 'ZONE_HISTORY_FETCH_SUCCEEDED': {
-      return {
-        ...state,
-        isLoadingHistories: false,
-        histories: {
-          ...state.histories,
-          [action.zoneId]: action.payload.map(datapoint => ({
-            ...datapoint,
-            hasParser: true,
-            hasData: true
-          })),
-        },
-      };
-    }
+    // case 'SOLAR_DATA_FETCH_SUCCEEDED': {
+    //   return { ...state, isLoadingSolar: false, solar: action.payload };
+    // }
 
-    case 'ZONE_HISTORY_FETCH_FAILED': {
-      // TODO: Implement error handling
-      return { ...state, isLoadingHistories: false };
-    }
+    // case 'SOLAR_DATA_FETCH_FAILED': {
+    //   // TODO: create specialized messages based on http error response
+    //   return { ...state, isLoadingSolar: false, solar: null, solarDataError: translation.translate('solarDataError') };
+    // }
 
-    case 'SOLAR_DATA_FETCH_REQUESTED': {
-      return { ...state, isLoadingSolar: true, solarDataError: null };
-    }
+    // case 'WIND_DATA_FETCH_REQUESTED': {
+    //   return { ...state, isLoadingWind: true, windDataError: null };
+    // }
 
-    case 'SOLAR_DATA_FETCH_SUCCEEDED': {
-      return { ...state, isLoadingSolar: false, solar: action.payload };
-    }
+    // case 'WIND_DATA_FETCH_SUCCEEDED': {
+    //   return { ...state, isLoadingWind: false, wind: action.payload };
+    // }
 
-    case 'SOLAR_DATA_FETCH_FAILED': {
-      // TODO: create specialized messages based on http error response
-      return { ...state, isLoadingSolar: false, solar: null, solarDataError: translation.translate('solarDataError') };
-    }
-
-    case 'WIND_DATA_FETCH_REQUESTED': {
-      return { ...state, isLoadingWind: true, windDataError: null };
-    }
-
-    case 'WIND_DATA_FETCH_SUCCEEDED': {
-      return { ...state, isLoadingWind: false, wind: action.payload };
-    }
-
-    case 'WIND_DATA_FETCH_FAILED': {
-      // TODO: create specialized messages based on http error response
-      return { ...state, isLoadingWind: false, wind: null, windDataError: translation.translate('windDataError') };
-    }
+    // case 'WIND_DATA_FETCH_FAILED': {
+    //   // TODO: create specialized messages based on http error response
+    //   return { ...state, isLoadingWind: false, wind: null, windDataError: translation.translate('windDataError') };
+    // }
 
     default:
       return state;
