@@ -5,21 +5,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { dispatchApplication } from '../../store';
-import { useConditionalZoneHistoryFetch } from '../../hooks/fetch';
-import {
-  useCurrentZoneHistoryDatetimes,
-  useCurrentZoneHistoryStartTime,
-  useCurrentZoneHistoryEndTime,
-} from '../../hooks/redux';
-import TimeSlider from '../../components/timeslider';
-
 import CountryPanel from './countrypanel';
 import { useLocation } from 'react-router-dom';
-
-const handleZoneTimeIndexChange = (timeIndex) => {
-  dispatchApplication('selectedZoneTimeIndex', timeIndex);
-};
 
 const mapStateToProps = (state) => ({
   selectedZoneTimeIndex: state.application.selectedZoneTimeIndex,
@@ -31,27 +18,13 @@ const SocialButtons = styled.div`
   }
 `;
 
-const ZoneDetailsPanel = ({ selectedZoneTimeIndex }) => {
-  const datetimes = useCurrentZoneHistoryDatetimes();
-  const startTime = useCurrentZoneHistoryStartTime();
-  const endTime = useCurrentZoneHistoryEndTime();
+const ZoneDetailsPanel = () => {
   const location = useLocation();
-
-  // Fetch history for the current zone if it hasn't been fetched yet.
-  useConditionalZoneHistoryFetch();
 
   return (
     <div className="left-panel-zone-details">
       <CountryPanel />
       <div className="detail-bottom-section">
-        <TimeSlider
-          className="zone-time-slider"
-          onChange={handleZoneTimeIndexChange}
-          selectedTimeIndex={selectedZoneTimeIndex}
-          datetimes={datetimes}
-          startTime={startTime}
-          endTime={endTime}
-        />
         <SocialButtons className="social-buttons" pathname={location.pathname}>
           <div>
             {/* Facebook share */}

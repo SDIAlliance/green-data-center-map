@@ -1,34 +1,10 @@
 import * as request from 'd3-request';
 import { sha256 } from 'js-sha256';
 
-// Not necessary as we already connected to a real API
-// import { isLocalhost } from './environment';
 import thirdPartyServices from '../services/thirdparty';
 
-// Not necessary as we already connected to a real API
-// function isRemoteParam() {
-//   return (new URLSearchParams(window.location.search)).get('remote') === 'true';
-// }
-
-// Not necessary as we already connected to a real API
-// Use local endpoint only if ALL of the following conditions are true:
-// 1. The app is running on localhost
-// 2. The `remote` search param hasn't been explicitly set to true
-// 3. Document domain has a non-empty value
-// function isUsingLocalEndpoint() {
-//   return isLocalhost() && !isRemoteParam() && document.domain !== '';
-// }
-
-export function getEndpoint() {
-  // return isUsingLocalEndpoint() ? 'http://localhost:8001' : 'https://app-backend.greendatacentermap.com';
-
-  return 'https://api.electricitymap.org';
-}
-
 export function protectedJsonRequest(path) {
-  // Not necessary as we already connected to a real API
-  // const token = isUsingLocalEndpoint() ? 'development' : ELECTRICITYMAP_PUBLIC_TOKEN;
-  const url = getEndpoint() + path;
+  const url = `https://api.electricitymap.org${path}`;
   const timestamp = new Date().getTime();
   const token = process.env.ELECTRICITYMAP_TOKEN;
 

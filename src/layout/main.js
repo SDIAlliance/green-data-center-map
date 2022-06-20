@@ -22,16 +22,10 @@ import { useCustomDatetime, useHeaderVisible } from '../hooks/router';
 import { useLoadingOverlayVisible } from '../hooks/redux';
 import {
   useGridDataPolling,
-  useConditionalWindDataPolling,
-  useConditionalSolarDataPolling,
   useRequestDataCenterFacilities
 } from '../hooks/fetch';
-// Not used right now
-// import { dispatchApplication } from '../store';
 import OnboardingModal from '../components/onboardingmodal';
 import LoadingOverlay from '../components/loadingoverlay';
-// Not used right now
-// import Toggle from '../components/toggle';
 import useSWR from 'swr';
 import ErrorBoundary from '../components/errorboundary';
 
@@ -56,8 +50,6 @@ const MapContainer = styled.div`
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 const Main = ({
-  // Not used right now
-  // electricityMixMode,
   hasConnectionWarning,
   hasGridZonesError
 }) => {
@@ -72,12 +64,6 @@ const Main = ({
 
   // Start grid data polling as soon as the app is mounted.
   useGridDataPolling();
-
-  // Poll wind data if the toggle is enabled.
-  useConditionalWindDataPolling();
-
-  // Poll solar data if the toggle is enabled.
-  useConditionalSolarDataPolling();
 
   // Fetch data centers data as soon as the app is mounted
   useRequestDataCenterFacilities()
