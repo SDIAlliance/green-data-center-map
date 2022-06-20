@@ -22,14 +22,10 @@ import { useCustomDatetime, useHeaderVisible } from '../hooks/router';
 import { useLoadingOverlayVisible } from '../hooks/redux';
 import {
   useGridDataPolling,
-  useConditionalWindDataPolling,
-  useConditionalSolarDataPolling,
   useRequestDataCenterFacilities
 } from '../hooks/fetch';
-import { dispatchApplication } from '../store';
 import OnboardingModal from '../components/onboardingmodal';
 import LoadingOverlay from '../components/loadingoverlay';
-import Toggle from '../components/toggle';
 import useSWR from 'swr';
 import ErrorBoundary from '../components/errorboundary';
 
@@ -42,6 +38,7 @@ const mapStateToProps = state => ({
   brightModeEnabled: state.application.brightModeEnabled,
   electricityMixMode: state.application.electricityMixMode,
   hasConnectionWarning: state.data.hasConnectionWarning,
+  hasGridZonesError: state.data.hasGridZonesError,
 });
 
 const MapContainer = styled.div`
@@ -53,8 +50,8 @@ const MapContainer = styled.div`
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 const Main = ({
-  electricityMixMode,
   hasConnectionWarning,
+  hasGridZonesError
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -67,12 +64,6 @@ const Main = ({
 
   // Start grid data polling as soon as the app is mounted.
   useGridDataPolling();
-
-  // Poll wind data if the toggle is enabled.
-  useConditionalWindDataPolling();
-
-  // Poll solar data if the toggle is enabled.
-  useConditionalSolarDataPolling();
 
   // Fetch data centers data as soon as the app is mounted
   useRequestDataCenterFacilities()
@@ -106,7 +97,8 @@ const Main = ({
             <MapContainer pathname={location.pathname} id="map-container">
               <Map />
               <Legend />
-              <div className="controls-container">
+              {/* Not used right now */}
+              {/* <div className="controls-container">
                 <Toggle
                   infoHTML={__('tooltips.cpinfo')}
                   onChange={value => dispatchApplication('electricityMixMode', value)}
@@ -116,7 +108,7 @@ const Main = ({
                   ]}
                   value={electricityMixMode}
                 />
-              </div>
+              </div> */}
               <LayerButtons />
             </MapContainer>
           </ErrorBoundary>
@@ -128,13 +120,18 @@ const Main = ({
               <a
                 href=""
                 onClick={(e) => {
-                  dispatch({ type: 'GRID_DATA_FETCH_REQUESTED', payload: { datetime } });
+                  dispatch({ type: 'GRID_ZONES_FETCH_REQUESTED', payload: { datetime } });
                   e.preventDefault();
                 }}
               >
                 {__('misc.retrynow')}
               </a>
               .
+            </div>
+          </div>
+          <div className={`error-wrapper flash-message ${hasGridZonesError ? 'active' : ''}`}>
+            <div className="inner">
+              {__('grid.fetch-error')}
             </div>
           </div>
           <div id="new-version" className={`flash-message ${isClientVersionOutdated ? 'active' : ''}`}>

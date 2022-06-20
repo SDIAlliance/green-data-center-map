@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { __ } from '../../helpers/translation';
 import styled from 'styled-components';
@@ -9,14 +9,10 @@ import CarbonIntensitySquare from '../carbonintensitysquare';
 import Tooltip from '../tooltip';
 import { ZoneName } from './common';
 
-const mapStateToProps = (state) => ({
-  electricityMixMode: state.application.electricityMixMode,
-});
-
 const CountryTableHeaderInner = styled.div`
   display: flex;
-  flex-basis: 33.3%;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 20px;
 `;
 
 const TooltipContent = React.memo(
@@ -44,27 +40,35 @@ const TooltipContent = React.memo(
     return (
       <div className="zone-details">
         <CountryTableHeaderInner>
-          <CarbonIntensitySquare value={co2intensity} />
-          <div className="country-col country-lowcarbon-wrap">
-            <div id="tooltip-country-lowcarbon-gauge" className="country-gauge-wrap">
-              <CircularGauge percentage={fossilFuelPercentage} />
+          {Boolean(co2intensity) && (
+            <CarbonIntensitySquare value={co2intensity} />
+          )}
+          {Boolean(fossilFuelPercentage) && (
+            <div className="country-col country-lowcarbon-wrap">
+              <div id="tooltip-country-lowcarbon-gauge" className="country-gauge-wrap">
+                <CircularGauge percentage={fossilFuelPercentage} />
+              </div>
+              <div className="country-col-headline">{__('country-panel.lowcarbon')}</div>
+              <div className="country-col-subtext" />
             </div>
-            <div className="country-col-headline">{__('country-panel.lowcarbon')}</div>
-            <div className="country-col-subtext" />
-          </div>
-          <div className="country-col country-renewable-wrap">
-            <div id="tooltip-country-renewable-gauge" className="country-gauge-wrap">
-              <CircularGauge percentage={renewablePercentage} />
+          )}
+          {Boolean(renewablePercentage) && (
+             <div className="country-col country-renewable-wrap">
+              <div id="tooltip-country-renewable-gauge" className="country-gauge-wrap">
+                <CircularGauge percentage={renewablePercentage} />
+              </div>
+              <div className="country-col-headline">{__('country-panel.renewable')}</div>
             </div>
-            <div className="country-col-headline">{__('country-panel.renewable')}</div>
-          </div>
+          )}
         </CountryTableHeaderInner>
       </div>
     );
   }
 );
 
-const MapCountryTooltip = ({ electricityMixMode, position, zoneData, onClose }) => {
+const MapCountryTooltip = ({ position, zoneData, onClose }) => {
+  const electricityMixMode = useSelector(state => state.application.electricityMixMode);
+
   if (!zoneData) return null;
 
   const isDataDelayed = zoneData.delays && zoneData.delays.production;
@@ -101,4 +105,4 @@ const MapCountryTooltip = ({ electricityMixMode, position, zoneData, onClose }) 
   );
 };
 
-export default connect(mapStateToProps)(MapCountryTooltip);
+export default MapCountryTooltip;

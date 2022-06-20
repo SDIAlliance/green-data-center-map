@@ -1,28 +1,34 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
+
+// Not used right now
+// import { Link as RouterLink } from 'react-router-dom';
 
 import { __ } from '../helpers/translation';
 import { saveKey } from '../helpers/storage';
-import {
-  useWindEnabled,
-  useSolarEnabled,
-  useSolarToggledLocation,
-  useWindToggledLocation,
-} from '../hooks/router';
+
+// Not used right now
+// import {
+//   useWindEnabled,
+//   useSolarEnabled,
+//   useSolarToggledLocation,
+//   useWindToggledLocation,
+// } from '../hooks/router';
 import { dispatchApplication } from '../store';
 
-import LanguageSelect from '../components/languageselect';
+// Not used right now
+// import LanguageSelect from '../components/languageselect';
 import ButtonToggle from '../components/buttontoggle';
 
 export default () => {
-  const windEnabled = useWindEnabled();
-  const windToggledLocation = useWindToggledLocation();
-  const windDataError = useSelector(state => state.data.windDataError);
+  // Not used right now
+  // const windEnabled = useWindEnabled();
+  // const windToggledLocation = useWindToggledLocation();
+  // const windDataError = useSelector(state => state.data.windDataError);
 
-  const solarEnabled = useSolarEnabled();
-  const solarDataError = useSelector(state => state.data.solarDataError);
-  const solarToggledLocation = useSolarToggledLocation();
+  // const solarEnabled = useSolarEnabled();
+  // const solarDataError = useSelector(state => state.data.solarDataError);
+  // const solarToggledLocation = useSolarToggledLocation();
 
   const brightModeEnabled = useSelector(state => state.application.brightModeEnabled);
   const toggleBrightMode = () => {
@@ -30,13 +36,15 @@ export default () => {
     saveKey('brightModeEnabled', !brightModeEnabled);
   };
 
-  const Link = ({ to, hasError, children }) =>
-  !hasError ? <RouterLink to={to}>{children}</RouterLink> : <div>{children}</div>;
+  // Not used right now
+  // const Link = ({ to, hasError, children }) =>
+  // !hasError ? <RouterLink to={to}>{children}</RouterLink> : <div>{children}</div>;
 
   return (
     <div className="layer-buttons-container">
-      <LanguageSelect />
-      <Link to={windToggledLocation} hasError={windDataError}>
+      {/* Not used right now */}
+      {/* <LanguageSelect /> */}
+      {/* <Link to={windToggledLocation} hasError={windDataError}>
         <ButtonToggle
           active={windEnabled}
           tooltip={__(windEnabled ? 'tooltips.hideWindLayer' : 'tooltips.showWindLayer')}
@@ -53,7 +61,7 @@ export default () => {
           ariaLabel={__(solarEnabled ? 'tooltips.hideSolarLayer' : 'tooltips.showSolarLayer')}
           icon="weather/sun"
         />
-      </Link>
+      </Link> */}
       <ButtonToggle
         active={brightModeEnabled}
         onChange={toggleBrightMode}

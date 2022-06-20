@@ -48,15 +48,11 @@
 
 #country-tooltip,
 #data-center-facilities-tooltip {
-    .zone-name-header{
+    .zone-name-header {
         margin-bottom: 5px;
     }
-    .zone-details > div{
+    .zone-details > div {
         margin-bottom: 5px;
-    }
-
-    .country-col:not(:first-of-type) {
-        margin-left: 1.25rem;
     }
 
     &.country-tooltip-visible,
@@ -94,7 +90,9 @@
 /* override mapbox styling */
 .mapboxgl-zoom-controls {
     right: 16px !important;
-    top: 69px !important;
+    top: 18px !important;
+    // Value when default layers buttons are present
+    // top: 69px !important;
     transition: box-shadow .4s;
     user-select: none;
 
