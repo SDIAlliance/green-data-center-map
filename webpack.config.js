@@ -12,7 +12,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = () => {
   // call dotenv and it will return an Object with a parsed key 
-  const env = dotenv.config().parsed;
+  const env = dotenv.config().parsed || {};
 
   return {
     devtool: isProduction ? 'sourcemap' : 'eval',
@@ -60,10 +60,10 @@ module.exports = () => {
         });
       },
       new webpack.DefinePlugin({
-        'process.env.ELECTRICITYMAP_TOKEN': `"${env.ELECTRICITYMAP_TOKEN}"`,
         ELECTRICITYMAP_PUBLIC_TOKEN: `"${process.env.ELECTRICITYMAP_PUBLIC_TOKEN || 'development'}"`,
         VERSION: JSON.stringify(version),
         'process.env': {
+          ELECTRICITYMAP_TOKEN: `"${env.ELECTRICITYMAP_TOKEN}"`,
           NODE_ENV: JSON.stringify(isProduction ? 'production' : 'development'),
         },
       }),
