@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { __ } from '../../helpers/translation';
 import styled from 'styled-components';
@@ -8,10 +8,6 @@ import CircularGauge from '../circulargauge';
 import CarbonIntensitySquare from '../carbonintensitysquare';
 import Tooltip from '../tooltip';
 import { ZoneName } from './common';
-
-const mapStateToProps = (state) => ({
-  electricityMixMode: state.application.electricityMixMode,
-});
 
 const CountryTableHeaderInner = styled.div`
   display: flex;
@@ -70,7 +66,9 @@ const TooltipContent = React.memo(
   }
 );
 
-const MapCountryTooltip = ({ electricityMixMode, position, zoneData, onClose }) => {
+const MapCountryTooltip = ({ position, zoneData, onClose }) => {
+  const electricityMixMode = useSelector(state => state.application.electricityMixMode);
+
   if (!zoneData) return null;
 
   const isDataDelayed = zoneData.delays && zoneData.delays.production;
@@ -107,4 +105,4 @@ const MapCountryTooltip = ({ electricityMixMode, position, zoneData, onClose }) 
   );
 };
 
-export default connect(mapStateToProps)(MapCountryTooltip);
+export default MapCountryTooltip;
