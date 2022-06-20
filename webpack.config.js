@@ -12,7 +12,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = () => {
   // call dotenv and it will return an Object with a parsed key 
-  const env = dotenv.config().parsed;
+  const env = dotenv.config().parsed || {};
 
   return {
     devtool: isProduction ? 'sourcemap' : 'eval',
