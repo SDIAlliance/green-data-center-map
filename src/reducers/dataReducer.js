@@ -38,33 +38,6 @@ const initialDataState = {
 
 module.exports = (state = initialDataState, action) => {
   switch (action.type) {
-    case 'ZONE_CARBON_INTENSITY_FETCH_REQUESTED': {
-      return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
-    }
-
-    case 'ZONE_CARBON_INTENSITY_FETCH_SUCCEEDED': {
-      return {
-        ...state,
-        isLoadingGrid: false,
-        grid: {
-          ...state.grid,
-          zones: {
-            ...state.grid.zones,
-            [action.payload.zone]: {
-              ...state.grid.zones[action.payload.zone],
-              co2intensity: action.payload.carbonIntensity,
-              datetime: action.payload.datetime
-            }
-          }
-        }
-      }
-    }
-
-    case 'ZONE_CARBON_INTENSITY_FETCH_FAILED': {
-      // If a zone doesn't have data, it will have a greyed out color on the map and a message on hover saying "Live data temporarily unavailable"
-      return { ...state, isLoadingGrid: false };
-    }
-
     case 'DATA_CENTERS_FETCH_REQUESTED': {
       return { ...state, isLoadingDataCenterFacilities: true };
     }
@@ -142,6 +115,33 @@ module.exports = (state = initialDataState, action) => {
 
     case 'GRID_ZONES_FETCH_FAILED': {
       return { ...state, hasGridZonesError: true, isLoadingGrid: false };
+    }
+
+    case 'ZONE_CARBON_INTENSITY_FETCH_REQUESTED': {
+      return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
+    }
+
+    case 'ZONE_CARBON_INTENSITY_FETCH_SUCCEEDED': {
+      return {
+        ...state,
+        isLoadingGrid: false,
+        grid: {
+          ...state.grid,
+          zones: {
+            ...state.grid.zones,
+            [action.payload.zone]: {
+              ...state.grid.zones[action.payload.zone],
+              co2intensity: action.payload.carbonIntensity,
+              datetime: action.payload.datetime
+            }
+          }
+        }
+      }
+    }
+
+    case 'ZONE_CARBON_INTENSITY_FETCH_FAILED': {
+      // If a zone doesn't have data, it will have a greyed out color on the map and a message on hover saying "Live data temporarily unavailable"
+      return { ...state, isLoadingGrid: false };
     }
 
     default:
