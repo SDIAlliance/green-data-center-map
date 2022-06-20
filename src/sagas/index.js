@@ -11,9 +11,9 @@ import { handleRequestError, protectedJsonRequest } from '../helpers/api';
 function* fetchZoneCarbonIntensity(endpoint) {
   try {
     const payload = yield call(protectedJsonRequest, endpoint);
-    yield put({ type: 'CARBON_INTENSITY_FETCH_SUCCEEDED', payload });
+    yield put({ type: 'ZONE_CARBON_INTENSITY_FETCH_SUCCEEDED', payload });
   } catch (err) {
-    yield put({ type: 'CARBON_INTENSITY_FETCH_FAILED' });
+    yield put({ type: 'ZONE_CARBON_INTENSITY_FETCH_FAILED' });
     handleRequestError(err);
   }
 }
@@ -53,7 +53,7 @@ function* fetchDataCenterFacilities() {
 
 export default function* () {
   // Data fetching
-  yield takeLatest('CARBON_INTENSITY_FETCH_REQUESTED', fetchZoneCarbonIntensity);
   yield takeLatest('DATA_CENTERS_FETCH_REQUESTED', fetchDataCenterFacilities)
   yield takeLatest('GRID_ZONES_FETCH_REQUESTED', fetchGridZones);
+  yield takeLatest('ZONE_CARBON_INTENSITY_FETCH_REQUESTED', fetchZoneCarbonIntensity);
 }

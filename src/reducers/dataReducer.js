@@ -38,11 +38,11 @@ const initialDataState = {
 
 module.exports = (state = initialDataState, action) => {
   switch (action.type) {
-    case 'CARBON_INTENSITY_FETCH_REQUESTED': {
+    case 'ZONE_CARBON_INTENSITY_FETCH_REQUESTED': {
       return { ...state, hasConnectionWarning: false, isLoadingGrid: true };
     }
 
-    case 'CARBON_INTENSITY_FETCH_SUCCEEDED': {
+    case 'ZONE_CARBON_INTENSITY_FETCH_SUCCEEDED': {
       return {
         ...state,
         isLoadingGrid: false,
@@ -60,7 +60,7 @@ module.exports = (state = initialDataState, action) => {
       }
     }
 
-    case 'CARBON_INTENSITY_FETCH_FAILED': {
+    case 'ZONE_CARBON_INTENSITY_FETCH_FAILED': {
       // If a zone doesn't have data, it will have a greyed out color on the map and a message on hover saying "Live data temporarily unavailable"
       return { ...state, isLoadingGrid: false };
     }
