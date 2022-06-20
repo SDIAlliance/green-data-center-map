@@ -1,5 +1,8 @@
 {
-    "panel-initial-text": {
+  "grid": {
+    "fetch-error": "There was a problem getting live carbon intensity data. Please try again later."
+  } , 
+  "panel-initial-text": {
         "thisproject": "This project is",
         "opensource": "Open Source",
         "see": "see",

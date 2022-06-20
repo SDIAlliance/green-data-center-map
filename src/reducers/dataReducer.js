@@ -44,6 +44,7 @@ const initialDataState = {
   dataCenterFacilities: [],
   grid: { zones, exchanges },
   hasConnectionWarning: false,
+  hasGridZonesError: false,
   hasInitializedGrid: false,
   histories: {},
   isLoadingDataCenterFacilities: false,
@@ -82,7 +83,7 @@ module.exports = (state = initialDataState, action) => {
     }
 
     case 'CARBON_INTENSITY_FETCH_FAILED': {
-      // TODO: Implement error handling
+      // If a zone doesn't have data, it will have a greyed out color on the map and a message on hover saying "Live data temporarily unavailable"
       return { ...state, isLoadingGrid: false };
     }
 
@@ -239,8 +240,7 @@ module.exports = (state = initialDataState, action) => {
     }
 
     case 'GRID_ZONES_FETCH_FAILED': {
-      // TODO: Implement error handling
-      return { ...state, hasConnectionWarning: true, isLoadingGrid: false };
+      return { ...state, hasGridZonesError: true, isLoadingGrid: false };
     }
 
     // Not used right now

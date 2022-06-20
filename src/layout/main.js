@@ -44,6 +44,7 @@ const mapStateToProps = state => ({
   brightModeEnabled: state.application.brightModeEnabled,
   electricityMixMode: state.application.electricityMixMode,
   hasConnectionWarning: state.data.hasConnectionWarning,
+  hasGridZonesError: state.data.hasGridZonesError,
 });
 
 const MapContainer = styled.div`
@@ -58,6 +59,7 @@ const Main = ({
   // Not used right now
   // electricityMixMode,
   hasConnectionWarning,
+  hasGridZonesError
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -139,6 +141,11 @@ const Main = ({
                 {__('misc.retrynow')}
               </a>
               .
+            </div>
+          </div>
+          <div className={`error-wrapper flash-message ${hasGridZonesError ? 'active' : ''}`}>
+            <div className="inner">
+              {__('grid.fetch-error')}
             </div>
           </div>
           <div id="new-version" className={`flash-message ${isClientVersionOutdated ? 'active' : ''}`}>
