@@ -15,8 +15,8 @@ const mapStateToProps = (state) => ({
 
 const CountryTableHeaderInner = styled.div`
   display: flex;
-  flex-basis: 33.3%;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 20px;
 `;
 
 const TooltipContent = React.memo(

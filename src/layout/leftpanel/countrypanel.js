@@ -138,8 +138,9 @@ const CountryHistoryTitle = styled.span`
 
 const CountryTableHeaderInner = styled.div`
   display: flex;
-  flex-basis: 33.3%;
-  justify-content: space-between;
+  gap: 20px;
+  padding-left: 1.25em;
+  padding-right: 1.25em;
 `;
 
 const CountryPanelStyled = styled.div`

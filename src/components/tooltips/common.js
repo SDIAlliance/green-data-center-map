@@ -22,11 +22,16 @@ export const MetricRatio = ({ value, total, format }) => (
   <small>{`(${isFinite(value) ? format(value) : '?'} / ${isFinite(total) ? format(total) : '?'})`}</small>
 );
 
+const Box = styled.div`
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+`;
 const Flag = styled.img``;
 
 export const ZoneName = ({ zone, ellipsify }) => (
-  <React.Fragment>
+  <Box>
     <Flag className="flag" alt="" src={flagUri(zone)} />
     {ellipsify ? getShortZoneName(zone) : getFullZoneName(zone)}
-  </React.Fragment>
+  </Box>
 );
